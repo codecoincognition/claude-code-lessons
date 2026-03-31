@@ -40,7 +40,7 @@ No coding experience required for Level 1. Levels 2+ assume basic terminal comfo
 
 ## About
 
-Built by [Vikas Sah](https://linkedin.com/in/vikassah) as part of the *Claude Code: Zero to Dangerous* series. New lessons ship weekly.
+Built by [Vikas Sah](https://linkedin.com/in/vikassah) as part of the *Claude Code: Zero to Dangerous* series. New lessons ship regularly.
 
 ---
 
