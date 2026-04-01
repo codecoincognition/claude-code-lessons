@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code — Micro Insights | Code Coin Cognition</title>
+<meta name="description" content="25 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
+<meta property="og:title" content="Claude Code Micro Insights">
+<meta property="og:description" content="25 advanced patterns for Claude Code. Agent model, context budget, @file, !, /compact and more.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f12;
+    --bg2: #13161b;
+    --bg3: #1a1e25;
+    --border: #252a33;
+    --border2: #2e3440;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22d3a0;
+    --amber: #f59e0b;
+    --red: #f87171;
+    --purple: #a78bfa;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Top nav bar */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #0d0f12ee;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .topbar-brand span { color: var(--accent); }
+
+  .topbar-sep {
+    color: var(--border2);
+    font-family: var(--mono);
+  }
+
+  .topbar-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted2);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+
+  .topbar-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .topbar-link.primary {
+    background: var(--accent);
+    color: #0d0f12;
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  .topbar-link.primary:hover {
+    background: #7dd3fc;
+    color: #0d0f12;
+  }
+
+  /* Shell */
+  .shell {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+
+  .header-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: #0ea5e91a;
+    color: var(--accent);
+    border: 1px solid #0ea5e930;
+  }
+
+  .badge.green { background: #22d3a01a; color: var(--green); border-color: #22d3a030; }
+  .badge.amber { background: #f59e0b1a; color: var(--amber); border-color: #f59e0b30; }
+  .badge.purple { background: #a78bfa1a; color: var(--purple); border-color: #a78bfa30; }
+  .badge.red { background: #f871711a; color: var(--red); border-color: #f8717130; }
+  .badge.muted { background: #1a1e25; color: var(--muted2); border-color: var(--border); }
+
+  .header h1 {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .header-sub {
+    color: var(--muted2);
+    font-size: 14px;
+    margin-bottom: 16px;
+    max-width: 580px;
+    line-height: 1.6;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-meta a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .header-meta a:hover { color: var(--accent); }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--muted2);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .filter-btn:hover { border-color: var(--border2); color: var(--text); }
+  .filter-btn.active { background: var(--accent); color: #0d0f12; border-color: var(--accent); font-weight: 700; }
+
+  /* Stats */
+  .stats-bar {
+    display: flex;
+    gap: 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .stat {
+    flex: 1;
+    padding: 14px 20px;
+    border-right: 1px solid var(--border);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* Section dividers */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 8px;
+  }
+
+  .section-divider span {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Cards */
+  .insight-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .insight-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg2);
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .insight-card:hover { border-color: var(--border2); }
+  .insight-card.open { border-color: var(--border2); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 28px;
+    font-weight: 500;
+  }
+
+  .card-title {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .chevron {
+    color: var(--muted);
+    font-size: 9px;
+    transition: transform 0.2s;
+    margin-left: 4px;
+    flex-shrink: 0;
+  }
+
+  .insight-card.open .chevron { transform: rotate(90deg); }
+
+  .card-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 20px;
+    gap: 18px;
+    flex-direction: column;
+    background: var(--bg3);
+  }
+
+  .insight-card.open .card-body { display: flex; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+
+  .insight-text {
+    color: var(--muted2);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .insight-text strong { color: var(--text); font-weight: 600; }
+
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: #93c5fd;
+    margin-top: 6px;
+  }
+
+  .impact-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .impact-bar-bg {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .impact-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--green);
+  }
+
+  .impact-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 90px;
+  }
+
+  kbd {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+
+  /* Bottom panels */
+  .bottom-section {
+    margin-top: 48px;
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+  }
+
+  .bottom-section h2 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+  }
+
+  .panel h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .panel-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .panel-list li {
+    display: flex;
+    gap: 8px;
+    color: var(--muted2);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .panel-list li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  .brand-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .brand-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .brand-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+
+  .brand-desc {
+    color: var(--muted2);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-left a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  .footer-right a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .footer-right a:hover { color: var(--accent); }
+
+  /* Search */
+  .search-wrap {
+    margin-bottom: 16px;
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 14px 9px 36px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .topbar-title { display: none; }
+    .stats-bar { flex-wrap: wrap; }
+    .stat { min-width: 45%; border-bottom: 1px solid var(--border); }
+    .bottom-grid { grid-template-columns: 1fr; }
+    .brand-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 20px; }
+    .card-tags { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<nav class="topbar">
+  <div class="topbar-left">
+    <a class="topbar-brand" href="https://codecoincognition.substack.com">Code<span>Coin</span>Cognition</a>
+    <span class="topbar-sep">/</span>
+    <span class="topbar-title">micro_insights.html</span>
+  </div>
+  <div class="topbar-right">
+    <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons" target="_blank">github</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-01-your-first" target="_blank">lesson 01</a>
+    <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-badges">
+      <span class="badge">Claude Code</span>
+      <span class="badge green">Zero to Dangerous</span>
+      <span class="badge muted">Lesson 01 Series</span>
+    </div>
+    <h1>Claude Code <span>Micro Insights</span></h1>
+    <p class="header-sub">25 advanced patterns extracted from <em>Your First 30 Minutes</em> — the agent mental model, context budget, @file, !, /compact, and the workflows most guides skip entirely.</p>
+    <div class="header-meta">
+      <a href="https://substack.com/@vikassah" target="_blank">by Vikas Sah</a>
+      <span style="color:var(--border2)">·</span>
+      <a href="https://codecoincognition.substack.com" target="_blank">codecoincognition.substack.com</a>
+      <span style="color:var(--border2)">·</span>
+      <a href="https://github.com/codecoincognition/claude-code-lessons" target="_blank">github repo →</a>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <input class="search-input" type="text" placeholder="search insights..." id="search" oninput="doSearch(this.value)">
+  </div>
+
+  <!-- Filters -->
+  <div class="filters" id="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">all</button>
+    <button class="filter-btn" onclick="setFilter('Mental Model', this)">mental model</button>
+    <button class="filter-btn" onclick="setFilter('Workflow', this)">workflow</button>
+    <button class="filter-btn" onclick="setFilter('Prompting', this)">prompting</button>
+    <button class="filter-btn" onclick="setFilter('Debugging', this)">debugging</button>
+    <button class="filter-btn" onclick="setFilter('Automation', this)">automation</button>
+    <button class="filter-btn" onclick="setFilter('Integration', this)">integration</button>
+    <button class="filter-btn" onclick="setFilter('Architecture', this)">architecture</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-val" id="visible-count">25</span>
+      <span class="stat-label">insights</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">7</span>
+      <span class="stat-label">categories</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">10</span>
+      <span class="stat-label">viral picks</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">5</span>
+      <span class="stat-label">article-ready</span>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="insight-grid" id="grid"></div>
+
+  <!-- Bottom panels -->
+  <div class="bottom-section">
+    <h2>// editorial_map</h2>
+    <div class="bottom-grid">
+      <div class="panel">
+        <h3>// top_10_viral_picks</h3>
+        <ul class="panel-list">
+          <li>Agent, not chatbot — the framing that changes everything</li>
+          <li>Context is a budget. Treat it like one.</li>
+          <li>/compact at 50%, not 90% — the pre-emptive strike</li>
+          <li>! commands are a free token zone</li>
+          <li>@file is a scalpel, not a shortcut</li>
+          <li>Stop chatting. Start commanding.</li>
+          <li>Git history as debugging context</li>
+          <li>Context poisoning: when to restart</li>
+          <li>Your CLAUDE.md is a second brain</li>
+          <li>The 60/80/95 degradation curve</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>// expand_to_full_articles</h3>
+        <ul class="panel-list">
+          <li><strong style="color:var(--text)">The Context Budget</strong> — deep-dive on tokens, degradation, compaction strategy</li>
+          <li><strong style="color:var(--text)">Commands, Not Chat</strong> — delegation patterns for engineers and non-engineers</li>
+          <li><strong style="color:var(--text)">The Agent Mental Model</strong> — why "AI assistant" is the wrong frame</li>
+          <li><strong style="color:var(--text)">The @ Protocol</strong> — precision prompting in large codebases</li>
+          <li><strong style="color:var(--text)">Claude Code in CI/CD</strong> — headless, pipe-driven automation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="panel" style="margin-bottom:0">
+        <h3 style="color:var(--purple)">// brand_pillars [ 3 signature series ]</h3>
+        <div class="brand-grid">
+          <div class="brand-card">
+            <div class="brand-name">#1 — Context Engineering</div>
+            <div class="brand-desc">Budget, degrade, compact, recover. Every lesson in the series touches this. Own the vocabulary before anyone else does.</div>
+          </div>
+          <div class="brand-card">
+            <div class="brand-name">#2 — Agent Delegation</div>
+            <div class="brand-desc">Commands vs chat. Filesystem access. Treating Claude as a fast junior dev. The mental model shift that unlocks everything else.</div>
+          </div>
+          <div class="brand-card">
+            <div class="brand-name">#3 — Terminal-Native AI</div>
+            <div class="brand-desc">!, @, /compact, headless mode, CI hooks. The shell-first workflow most AI content completely ignores. Your differentiator.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-left">
+      Part of the <a href="https://codecoincognition.substack.com">Claude Code: Zero to Dangerous</a> curriculum.
+    </div>
+    <div class="footer-right">
+      <a href="https://github.com/codecoincognition/claude-code-lessons" target="_blank">github</a>
+      <a href="https://codecoincognition.substack.com" target="_blank">substack</a>
+      <a href="https://substack.com/@vikassah" target="_blank">@vikassah</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const insights = [
+  {
+    id: 1,
+    title: "Claude Code is an agent, not a chatbot — and that distinction changes everything",
+    category: "Mental Model",
+    impact: 95,
+    viral: true,
+    insight: "Claude Code has <strong>direct filesystem access</strong>. It doesn't suggest edits — it opens your files, makes changes, and saves them. The moment you internalize this, you stop asking for advice and start delegating work.",
+    why: "Most users treat Claude like a smarter Google. The actual mental model is a <strong>junior dev with root access</strong>. This reframe changes what you ask, how you ask it, and how you verify output.",
+    example: `# Wrong mental model (chatbot mode)
+"How would I add validation to this function?"
+
+# Right mental model (agent mode)
+"@app.py — add input validation to add().
+Reject empty strings. Show error. Don't save."
+
+# Claude modifies the file. You verify. Done.`
+  },
+  {
+    id: 2,
+    title: "Context is a budget. /context is your fuel gauge. Most people never check it.",
+    category: "Mental Model",
+    impact: 98,
+    viral: true,
+    insight: "Claude's context window is a <strong>finite whiteboard</strong>. Every file read, every message exchanged, every response written consumes space. When it fills, quality degrades — silently and non-linearly.",
+    why: "Claude at 85% context doesn't feel 15% worse. It feels <strong>subtly wrong</strong>: slightly off variable names, dropped constraints, confident mistakes. You won't notice until damage is done.",
+    example: `# Run these every 10-15 minutes
+/context     # → shows % of window used
+/cost        # → shows tokens consumed
+
+# The degradation curve (memorise this):
+# ~60% → answers get vague
+# ~80% → drops earlier constraints  
+# ~95% → hallucinates confidently
+
+# Most beginners never check. Now you will.`
+  },
+  {
+    id: 3,
+    title: "/compact at 50%, not 90% — the pre-emptive strike",
+    category: "Workflow",
+    impact: 92,
+    viral: true,
+    insight: "<kbd>/compact</kbd> summarises the entire conversation into compressed form and clears history. Context usage drops dramatically. Claude retains what matters: files, changes, what's next.",
+    why: "Most developers wait until Claude breaks down at 90%+, then restart cold. Compacting at 50% <strong>keeps quality above the degradation threshold</strong> for the entire session — no restart needed.",
+    example: `# At ~50% context:
+/compact
+
+# Verify Claude retained state:
+"What files did we work on and what changed?"
+# → Claude recalls everything, even with cleared history
+
+# When to compact:
+# ✓ After every major task
+# ✓ Before switching focus areas
+# ✓ When /context shows > 50%`
+  },
+  {
+    id: 4,
+    title: "The ! operator is a free token zone",
+    category: "Workflow",
+    impact: 85,
+    viral: true,
+    insight: "Commands prefixed with <kbd>!</kbd> run directly on your machine — <strong>zero tokens consumed, zero context used</strong>. It's a built-in verification layer that costs nothing.",
+    why: "Every switch to a separate terminal breaks flow and wastes cognitive overhead. ! keeps you in one place. More importantly: ! commands run on your machine, not through the AI — a fundamental separation worth internalising.",
+    example: `# These cost zero tokens — use freely:
+!python hello.py          # run and verify
+!git diff src/api.ts      # see what changed
+!pytest tests/ -v         # run test suite
+!cat .env.example         # inspect a file
+!ls src/                  # explore structure
+
+# Workflow: Claude edits → !verify → next prompt
+# Never accumulate unverified changes`
+  },
+  {
+    id: 5,
+    title: "@file is a scalpel, not a convenience feature",
+    category: "Prompting",
+    impact: 90,
+    viral: true,
+    insight: "Every <kbd>@file</kbd> reference you omit forces Claude to spend tokens searching your codebase. In a large repo, an undirected prompt can cause Claude to read 4–8 files before doing any real work.",
+    why: "Over a 2-hour session this compounds massively — and worse, Claude builds understanding from <strong>files it happened to find</strong>, not the ones that actually matter. Precision in = precision out.",
+    example: `# Vague — Claude searches, burns tokens
+"Fix the crash when the task list is empty"
+
+# Precise — Claude goes straight there
+"@src/tasks/TaskList.tsx @src/hooks/useTasks.ts
+Fix crash when tasks array is empty —
+add null check before .map()"
+
+# Rule: if you know the file, use @. Every time.
+# Works on any file: .py, .ts, .json, .md, anything`
+  },
+  {
+    id: 6,
+    title: "Stop chatting. Start commanding.",
+    category: "Prompting",
+    impact: 88,
+    viral: true,
+    insight: "Conversational prompts fill the context window with noise. Command-style prompts are faster, cheaper, and more accurate. The pattern: <strong>@file + action + specific outcome. No maybe.</strong>",
+    why: "Claude is not a colleague you think out loud with. It's an execution engine. Vague prompts make it hedge, ask clarifying questions, and spend tokens explaining what it's about to do — instead of doing it.",
+    example: `# Chatty (slow, expensive, imprecise):
+"Can you take a look at app.py and maybe add
+some validation? Empty inputs could be a problem.
+What do you think would work best here?"
+
+# Command (fast, precise, efficient):
+"@app.py — add input validation to add().
+Reject empty strings. Show error. Don't save."
+
+# Pattern: @file + action + outcome. That's it.`
+  },
+  {
+    id: 7,
+    title: "CLAUDE.md is a persistent instruction layer — not documentation",
+    category: "Architecture",
+    impact: 93,
+    viral: false,
+    insight: "CLAUDE.md auto-loads into every session. It's not a README — it's a <strong>live operating manual</strong> for your AI agent. Every convention, constraint, and active sprint context belongs here.",
+    why: "Without it, you re-explain your architecture every session. With it, Claude starts already briefed. It compounds: every session teaches you something new, that insight goes in CLAUDE.md, every future session benefits.",
+    example: `# CLAUDE.md
+## Architecture
+- API routes: /src/routes only. Never elsewhere.
+- Schema changes: ask first, never auto-edit.
+- Tests mirror source path with .test.ts suffix.
+
+## Active Sprint
+Stripe webhook integration.
+Key file: /src/webhooks/stripe.ts
+
+## Off-limits
+- Never touch /src/core/auth.ts without asking
+- Never run db migrations directly`
+  },
+  {
+    id: 8,
+    title: "Context poisoning: when clarifying makes it worse",
+    category: "Mental Model",
+    impact: 87,
+    viral: false,
+    insight: "When Claude reverts agreed decisions, ignores earlier constraints, or contradicts itself — the context is poisoned. Adding more prompts <strong>compounds the problem</strong>. The fix is a fresh session, not clarification.",
+    why: "Earlier messages partially fall out of context window. Claude is literally operating on incomplete information. More instructions on top of poisoned context = more confident wrong answers.",
+    example: `# Signs of context poisoning:
+# 1. Reverts a change you already agreed was wrong
+# 2. Ignores a constraint from 20+ messages ago
+# 3. Gives conflicting answers in the same session
+
+# Recovery — the three steps:
+/compact
+"Summarise: what files, what changed, what's next."
+# → open new session, paste summary as first message
+
+# Don't negotiate with a poisoned context. Restart.`
+  },
+  {
+    id: 9,
+    title: "Git history as debugging context — the forensic prompt",
+    category: "Debugging",
+    impact: 82,
+    viral: false,
+    insight: "Feed Claude <kbd>git log</kbd> and <kbd>git blame</kbd> before asking it to debug. You're giving it <strong>archaeological context</strong> — how the file got to its current broken state.",
+    why: "Most debugging prompts fail because Claude doesn't know what changed. With git history, it becomes an investigator, not a guesser. It can pinpoint the commit that introduced the regression.",
+    example: `# Step 1: get history — zero tokens via !
+!git log --oneline -15 src/billing/invoice.ts
+!git blame src/billing/invoice.ts | tail -30
+
+# Step 2: paste into Claude
+"@src/billing/invoice.ts
+Invoice total is off by the tax amount.
+Here's recent git history: [paste output]
+What changed and what's likely broken?"`
+  },
+  {
+    id: 10,
+    title: "Onboard Claude like a junior dev on day one",
+    category: "Mental Model",
+    impact: 89,
+    viral: false,
+    insight: "Claude knows everything about programming and nothing about your codebase. Onboard it the same way you'd onboard a fast junior dev: <strong>architecture, conventions, current task, off-limits areas</strong>.",
+    why: "The gap between a good session and a great one is almost always how well Claude was briefed at the start, not how smart it is. The briefing cost is 60 seconds. The compounding benefit is every prompt that follows.",
+    example: `# Start of a complex feature session:
+"Here's our architecture: @docs/architecture.md
+Here's our API conventions: @docs/api-patterns.md
+Today: add rate limiting to /src/routes/api.ts
+Off-limits: don't touch /src/core/auth.ts
+Read those files first, then share your plan
+before making any changes."`
+  },
+  {
+    id: 11,
+    title: "Headless Claude Code is a CI/CD component, not just a dev tool",
+    category: "Automation",
+    impact: 91,
+    viral: false,
+    insight: "Claude Code runs non-interactively via <kbd>claude -p \"prompt\"</kbd>. Pipe it into CI for automated PR descriptions, release notes, or security audits — <strong>no human in the loop</strong>.",
+    why: "This is the bridge from Claude as a chat tool to Claude as infrastructure. Once it's in CI, it runs on every commit. The same capability you use interactively becomes a programmable component.",
+    example: `# GitHub Actions: auto-generate PR description
+- name: Generate PR Summary
+  run: |
+    git log --oneline origin/main..HEAD | \\
+    claude -p "Write a concise PR description:
+    summary, changed files, testing notes.
+    Output markdown." >> pr-body.md
+
+# Or: security scan on every PR
+git diff origin/main | \\
+claude -p "Flag: hardcoded secrets, SQL injection,
+missing auth checks. Output: PASS or issues list."`
+  },
+  {
+    id: 12,
+    title: "Build a personal slash command library in .claude/commands/",
+    category: "Automation",
+    impact: 80,
+    viral: false,
+    insight: "Custom slash commands live in <kbd>.claude/commands/</kbd> as markdown files. They're reusable, parameterised workflows — your most-used patterns as <strong>one-keystroke macros</strong>.",
+    why: "PR prep, test generation, refactor audits — you run these same prompts repeatedly. Templatising eliminates re-typing and locks in best-practice prompt structure across every session.",
+    example: `# .claude/commands/pr-prep.md
+Review @{{files}} and:
+1. Write a PR description (problem, solution, tests)
+2. List edge cases not covered by tests
+3. Flag anything that should be a follow-up ticket
+Output as markdown.
+
+# Usage — one keystroke:
+/pr-prep src/api/payments.ts src/hooks/usePayment.ts`
+  },
+  {
+    id: 13,
+    title: "Multi-file @references — Claude handles the dependency graph",
+    category: "Prompting",
+    impact: 84,
+    viral: false,
+    insight: "Reference multiple files in one prompt with <kbd>@file1 @file2</kbd>. Claude reads both, understands the relationship, and makes <strong>coordinated changes</strong> — treating them as a single unit of work.",
+    why: "Most developers prompt one file at a time. But real bugs span multiple files. Multi-reference prompts let Claude understand dependencies and keep changes consistent without you manually wiring them together.",
+    example: `# Fix a bug that spans two files — one prompt:
+"@app.py @utils.py
+Truncated text in utils.py ends up longer than
+the limit. Fix it in utils.py, then update app.py
+to use the fixed version for all task title displays."
+
+# Claude reads both, fixes one, updates the other.
+# One prompt. Two files. Zero manual coordination.`
+  },
+  {
+    id: 14,
+    title: "Use --output-format json to pipe Claude into downstream tools",
+    category: "Integration",
+    impact: 78,
+    viral: false,
+    insight: "<kbd>claude --output-format json</kbd> emits structured output — making Claude <strong>composable with any script, API, or pipeline</strong>. This is how you build Claude into automation, not just sessions.",
+    why: "Unstructured text output requires fragile parsing. JSON output is machine-readable from the start. Pipe it into Jira, Slack, a database, or a GitHub issue creator with no glue code.",
+    example: `# Structured code review → GitHub issues
+claude -p "Review this diff. Return JSON only:
+{severity, issues: string[], recommendation}" \\
+  --output-format json < diff.txt | \\
+  jq '.issues[]' | \\
+  xargs -I{} gh issue create --title "{}"
+
+# Claude's analysis becomes GitHub issues. Automatically.`
+  },
+  {
+    id: 15,
+    title: "Ask what's missing, not what's wrong — the negative space audit",
+    category: "Architecture",
+    impact: 86,
+    viral: false,
+    insight: "Prompt Claude to identify what's <strong>absent</strong> from your codebase. LLMs have strong priors on what production systems include — and yours probably doesn't have all of them.",
+    why: "Most code review asks 'what's wrong with this?' The higher-leverage question is 'what should exist here that doesn't?' Claude's training data includes thousands of production codebases. Use that.",
+    example: `# The negative space audit
+"@src/api/ @src/middleware/
+Review this API layer.
+List ONLY what's completely absent that a
+production system should have.
+Do not explain what exists.
+Format: [missing pattern] → [why it matters]"
+
+# Common output: rate limiting, request validation,
+# audit logging, circuit breakers, auth middleware`
+  },
+  {
+    id: 16,
+    title: "Generate N variants in one shot — speculative execution",
+    category: "Prompting",
+    impact: 79,
+    viral: false,
+    insight: "Instead of iterating on one approach, ask Claude to generate 2–3 competing implementations with explicit tradeoffs. Pick the best one. <strong>Almost always faster than iteration.</strong>",
+    why: "Iteration is expensive: tokens, time, cognitive load. Generating variants front-loads the decision and removes sunk-cost bias from single-approach thinking. Treat it like a design review, not a conversation.",
+    example: `"@src/cache/CacheManager.ts
+Generate 3 implementations of cache invalidation:
+1. TTL-based
+2. Event-driven  
+3. Hybrid
+
+For each: code snippet + one-line tradeoff.
+Label clearly. Don't recommend — I'll decide."`
+  },
+  {
+    id: 17,
+    title: "Wire Claude into git pre-commit as an agentic guardrail",
+    category: "Integration",
+    impact: 83,
+    viral: false,
+    insight: "Run Claude as a pre-commit hook to review diffs before they land. Claude reviewing its own output catches the class of bugs that are <strong>locally correct but globally wrong</strong>.",
+    why: "Claude makes mistakes. Claude also catches mistakes better than a linter. Pre-commit creates a second-pass review that runs on every commit, faster than a human reviewer and cheaper than a CI job.",
+    example: `# .git/hooks/pre-commit
+#!/bin/bash
+DIFF=$(git diff --cached)
+RESULT=$(echo "$DIFF" | claude -p "Review this diff.
+Flag: broken imports, missing error handling,
+hardcoded values, inconsistent naming.
+Output PASS or a bullet list of issues.")
+
+echo "$RESULT"
+if echo "$RESULT" | grep -q "^-"; then
+  echo "Claude flagged issues. Commit blocked."
+  exit 1
+fi`
+  },
+  {
+    id: 18,
+    title: "Compact, summarise, restart — the three-step session recovery",
+    category: "Workflow",
+    impact: 86,
+    viral: false,
+    insight: "When a session goes sideways — wrong direction, poisoned context, forgotten constraints — there's a standard recovery: <kbd>/compact</kbd>, extract summary, restart with that summary as the first message.",
+    why: "Most engineers either push through a broken session (compounding errors) or start completely cold (losing all progress). The three-step recovery is the <strong>third option</strong> nobody tells you about.",
+    example: `# Step 1: preserve state
+/compact
+
+# Step 2: extract the handoff
+"Give me a one-paragraph summary:
+what files changed, what works,
+what's broken, and what's next."
+
+# Step 3: new session, paste and continue
+"Context: [paste summary].
+Continue from where we left off."`
+  },
+  {
+    id: 19,
+    title: "!commands as zero-cost checkpoints — build this into muscle memory",
+    category: "Workflow",
+    impact: 77,
+    viral: false,
+    insight: "After every Claude edit, run a <kbd>!</kbd> checkpoint: test, diff, or run. This catches mistakes when context is fresh, not 10 messages later when unwinding is expensive.",
+    why: "The cost of catching a mistake increases with conversational distance. A wrong edit caught immediately costs one re-prompt. Caught 20 messages later it may require restarting the session.",
+    example: `# After every significant Claude edit:
+!git diff              # what actually changed?
+!python -m pytest -x  # did I break anything?
+!node src/index.js    # does it still run?
+
+# The habit loop:
+# Claude edits → ! verify → next prompt
+# Never accumulate more than 2-3 unverified changes`
+  },
+  {
+    id: 20,
+    title: "Version your CLAUDE.md alongside your code — it compounds",
+    category: "Architecture",
+    impact: 80,
+    viral: false,
+    insight: "Every insight about your project — naming conventions, file ownership, risky modules, known footguns — goes in CLAUDE.md <strong>immediately</strong>. Commit it with the feature that taught you the lesson.",
+    why: "CLAUDE.md updated once is documentation. CLAUDE.md updated continuously is a living mental model of your project that makes every future session faster. The compound interest is real.",
+    example: `# After hitting a footgun, add to CLAUDE.md:
+## ⚠️ Known footguns
+- Never call applyDiscount() before validateCart()
+  Order matters — validateCart() sets state that
+  applyDiscount() depends on. Bug introduced in #847.
+
+# Then commit:
+# git commit -m "fix: checkout bug + update CLAUDE.md"`
+  },
+  {
+    id: 21,
+    title: "Non-engineers can use Claude Code — delegation is the skill, not coding",
+    category: "Mental Model",
+    impact: 76,
+    viral: false,
+    insight: "The 'commands not chat' pattern isn't a coding skill — it's a <strong>delegation skill</strong>. PMs, marketers, and founders can use Claude Code to build real things without writing a line of code.",
+    why: "The blocker isn't the terminal. It's the mental model. Once someone understands 'point at a file, describe an outcome, Claude does the work', the interface friction disappears completely.",
+    example: `# A PM building a prototype — no code knowledge:
+"@landing-page.html
+Add a pricing section below the features section.
+Three tiers: Free, Pro ($29/mo), Enterprise.
+Match the existing styling. Don't change anything else."
+
+# The skill: where + what + constraints.
+# Claude handles the how.`
+  },
+  {
+    id: 22,
+    title: "Use /cost to measure prompting efficiency — optimise what you measure",
+    category: "Workflow",
+    impact: 75,
+    viral: false,
+    insight: "<kbd>/cost</kbd> shows exactly how many tokens a session consumed. Use it to compare prompting strategies — vague vs. precise, chatty vs. command-style — and <strong>build intuition for what's efficient</strong>.",
+    why: "You can't improve what you don't measure. Most developers have no intuition for token cost. /cost makes the abstract concrete and trains better prompting habits faster than any guide.",
+    example: `# Experiment — run this once:
+# 1. Solve a problem with a vague conversational prompt
+#    Check /cost
+# 2. Solve the same problem with @file + command style
+#    Check /cost
+
+# Most engineers find precise prompts use
+# 40-60% fewer tokens for the same outcome —
+# and get there in fewer back-and-forth turns`
+  },
+  {
+    id: 23,
+    title: "The sandbox pattern: real bugs beat hello-world tutorials",
+    category: "Mental Model",
+    impact: 72,
+    viral: false,
+    insight: "Learning Claude Code on a real (small) codebase with <strong>deliberate bugs</strong> teaches delegation skills 10x faster than contrived examples. The bugs need to feel real — the skills transfer to real code.",
+    why: "Hello-world tutorials teach syntax. Sandbox tutorials with real file structures, real bugs, and real verification loops teach the agent-steering mental model — which is the actual skill that matters.",
+    example: `# The Lesson 01 sandbox:
+# starter/
+# ├── hello.py   ← modify this
+# ├── app.py     ← real bug: crash on empty task list
+# └── utils.py   ← real bug: truncation logic off
+#
+# The bugs are deliberate. The fix workflow is real.
+# You learn @, !, /compact in the context of
+# actual consequences — not toy examples.`
+  },
+  {
+    id: 24,
+    title: "The 5-level progression — why a curriculum beats a tip list",
+    category: "Architecture",
+    impact: 74,
+    viral: false,
+    insight: "Structuring Claude Code knowledge as a progression (setup → sessions → config → automation → orchestration) is more useful than a flat tip list because <strong>later skills depend on earlier ones</strong>.",
+    why: "Flat tip lists have no dependencies. A curriculum means readers self-select entry points, know what to learn next, and can measure progress. It also makes content teachable — not just consumable.",
+    example: `# Zero to Dangerous curriculum:
+# L1: First 30 min  — agent model, @, !, context
+# L2: First week    — undo, experiments, sessions
+# L3: First month   — CLAUDE.md, custom commands
+# L4: Power user    — automation, safety guardrails
+# L5: Architect     — multi-agent, orchestration
+#
+# Each level gates the next. Not a tip list.
+# Skills compound. Understanding compounds.`
+  },
+  {
+    id: 25,
+    title: "Inspect before you trust — Claude's edits are proposals, not facts",
+    category: "Workflow",
+    impact: 83,
+    viral: false,
+    insight: "Every Claude edit is a proposal. Your job is to <strong>steer and verify</strong>, not to accept and ship. The ! operator, git diff, and test runs are your verification stack — use all three.",
+    why: "The biggest productivity trap in Claude Code is accepting edits without checking them. Claude is fast and usually right. It is not always right. The developer who verifies everything ships better code than the one who delegates everything.",
+    example: `# After every Claude edit — three-layer check:
+!git diff           # layer 1: what changed?
+!pytest tests/ -v   # layer 2: did it break anything?
+# layer 3: does it make sense? (you, reading the diff)
+
+# The mental model:
+# Claude = fast junior dev
+# You = senior engineer doing code review
+# The ! stack = your review tools`
+  }
+];
+
+const catColors = {
+  "Mental Model": "green",
+  "Workflow": "accent",
+  "Prompting": "amber",
+  "Debugging": "red",
+  "Automation": "purple",
+  "Integration": "purple",
+  "Architecture": "amber"
+};
+
+const sections = {
+  "Mental Model": "// mental_models",
+  "Workflow": "// workflow_patterns",
+  "Prompting": "// prompting_patterns",
+  "Debugging": "// debugging_patterns",
+  "Architecture": "// architecture_patterns",
+  "Automation": "// automation_patterns",
+  "Integration": "// integration_patterns"
+};
+
+const order = ["Mental Model", "Workflow", "Prompting", "Debugging", "Architecture", "Automation", "Integration"];
+
+let activeFilter = 'all';
+let activeSearch = '';
+
+function getFiltered() {
+  return insights.filter(ins => {
+    const matchCat = activeFilter === 'all' || ins.category === activeFilter;
+    const matchSearch = !activeSearch ||
+      ins.title.toLowerCase().includes(activeSearch) ||
+      ins.insight.toLowerCase().includes(activeSearch) ||
+      ins.why.toLowerCase().includes(activeSearch) ||
+      ins.example.toLowerCase().includes(activeSearch);
+    return matchCat && matchSearch;
+  });
+}
+
+function renderInsights() {
+  const filtered = getFiltered();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  document.getElementById('visible-count').textContent = filtered.length;
+
+  const grouped = {};
+  order.forEach(cat => { grouped[cat] = []; });
+  filtered.forEach(ins => {
+    if (grouped[ins.category]) grouped[ins.category].push(ins);
+  });
+
+  order.forEach(cat => {
+    if (!grouped[cat] || grouped[cat].length === 0) return;
+    const div = document.createElement('div');
+    div.className = 'section-divider';
+    div.innerHTML = `<span>${sections[cat]}</span>`;
+    grid.appendChild(div);
+
+    grouped[cat].forEach(ins => {
+      const card = document.createElement('div');
+      card.className = 'insight-card';
+      const colorClass = catColors[ins.category] || 'accent';
+      card.innerHTML = `
+        <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="card-num">${String(ins.id).padStart(2,'0')}</span>
+          <span class="card-title">${ins.title}</span>
+          <div class="card-tags">
+            ${ins.viral ? '<span class="badge green">viral pick</span>' : ''}
+            <span class="badge ${colorClass}">${ins.category.toLowerCase()}</span>
+          </div>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="section-label">// core insight</div>
+            <div class="insight-text">${ins.insight}</div>
+          </div>
+          <div>
+            <div class="section-label">// why it matters</div>
+            <div class="insight-text">${ins.why}</div>
+          </div>
+          <div>
+            <div class="section-label">// example</div>
+            <pre>${ins.example}</pre>
+          </div>
+          <div>
+            <div class="section-label">// leverage score</div>
+            <div class="impact-row">
+              <span class="impact-label">impact</span>
+              <div class="impact-bar-bg">
+                <div class="impact-bar-fill" style="width:${ins.impact}%"></div>
+              </div>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--muted);min-width:30px;text-align:right">${ins.impact}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  });
+}
+
+function setFilter(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInsights();
+}
+
+function doSearch(val) {
+  activeSearch = val.toLowerCase().trim();
+  renderInsights();
+}
+
+renderInsights();
+</script>
+</body>
+</html>
