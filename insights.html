@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code — Micro Insights | Code Coin Cognition</title>
-<meta name="description" content="25 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
+<meta name="description" content="33 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
 <meta property="og:title" content="Claude Code Micro Insights">
-<meta property="og:description" content="25 advanced patterns for Claude Code. Agent model, context budget, @file, !, /compact and more.">
+<meta property="og:description" content="33 advanced patterns for Claude Code. Agent model, context budget, undo & rewind, experimentation loops, and more.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -597,6 +597,7 @@
   <div class="topbar-right">
     <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons" target="_blank">github</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-01-your-first" target="_blank">lesson 01</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 02</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -608,10 +609,10 @@
     <div class="header-badges">
       <span class="badge">Claude Code</span>
       <span class="badge green">Zero to Dangerous</span>
-      <span class="badge muted">Lesson 01 Series</span>
+      <span class="badge muted">Lessons 01 — 02</span>
     </div>
     <h1>Claude Code <span>Micro Insights</span></h1>
-    <p class="header-sub">25 advanced patterns extracted from <em>Your First 30 Minutes</em> — the agent mental model, context budget, @file, !, /compact, and the workflows most guides skip entirely.</p>
+    <p class="header-sub">33 advanced patterns extracted from <em>Your First 30 Minutes</em> and <em>Undo &amp; Recover</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, and the experimentation loop most guides skip entirely.</p>
     <div class="header-meta">
       <a href="https://substack.com/@vikassah" target="_blank">by Vikas Sah</a>
       <span style="color:var(--border2)">·</span>
@@ -641,7 +642,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">25</span>
+      <span class="stat-val" id="visible-count">33</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -649,11 +650,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">10</span>
+      <span class="stat-val">15</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">5</span>
+      <span class="stat-val">7</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -666,7 +667,7 @@
     <h2>// editorial_map</h2>
     <div class="bottom-grid">
       <div class="panel">
-        <h3>// top_10_viral_picks</h3>
+        <h3>// top_15_viral_picks</h3>
         <ul class="panel-list">
           <li>Agent, not chatbot — the framing that changes everything</li>
           <li>Context is a budget. Treat it like one.</li>
@@ -678,6 +679,11 @@
           <li>Context poisoning: when to restart</li>
           <li>Your CLAUDE.md is a second brain</li>
           <li>The 60/80/95 degradation curve</li>
+          <li>Esc × 2 — the two-keystroke undo nobody knows</li>
+          <li>/rewind — undo with memory, not amnesia</li>
+          <li>When undo is free, experiments are free</li>
+          <li>The rewind loop: Instruct → Check → Rewind → Refine</li>
+          <li>Don't hedge your prompts — fire and check</li>
         </ul>
       </div>
       <div class="panel">
@@ -688,13 +694,15 @@
           <li><strong style="color:var(--text)">The Agent Mental Model</strong> — why "AI assistant" is the wrong frame</li>
           <li><strong style="color:var(--text)">The @ Protocol</strong> — precision prompting in large codebases</li>
           <li><strong style="color:var(--text)">Claude Code in CI/CD</strong> — headless, pipe-driven automation</li>
+          <li><strong style="color:var(--text)">The Rewind Loop</strong> — why iteration speed beats prompt quality</li>
+          <li><strong style="color:var(--text)">Cheap Undo, Free Experiments</strong> — the mindset shift that changes how you use AI tools</li>
         </ul>
       </div>
     </div>
 
     <div style="margin-top:16px">
       <div class="panel" style="margin-bottom:0">
-        <h3 style="color:var(--purple)">// brand_pillars [ 3 signature series ]</h3>
+        <h3 style="color:var(--purple)">// brand_pillars [ 4 signature series ]</h3>
         <div class="brand-grid">
           <div class="brand-card">
             <div class="brand-name">#1 — Context Engineering</div>
@@ -707,6 +715,10 @@
           <div class="brand-card">
             <div class="brand-name">#3 — Terminal-Native AI</div>
             <div class="brand-desc">!, @, /compact, headless mode, CI hooks. The shell-first workflow most AI content completely ignores. Your differentiator.</div>
+          </div>
+          <div class="brand-card">
+            <div class="brand-name">#4 — Cheap Undo, Bold Moves</div>
+            <div class="brand-desc">Esc×2, /rewind, the Instruct→Check→Rewind→Refine loop. When undo is free, experiments are free. The safety net that turns cautious users into fast shippers.</div>
           </div>
         </div>
       </div>
@@ -1190,6 +1202,174 @@ Match the existing styling. Don't change anything else."
 # Claude = fast junior dev
 # You = senior engineer doing code review
 # The ! stack = your review tools`
+  },
+
+  // ── Lesson 02: Undo & Recover ──────────────────────────
+
+  {
+    id: 26,
+    title: "Esc × 2 — the rewind menu nobody knows exists",
+    category: "Workflow",
+    impact: 94,
+    viral: true,
+    insight: "Press Escape twice and the <strong>rewind menu</strong> opens — a list of every prompt in your session. Pick a turn to go back to, then choose: restore code + conversation, restore code only, or restore conversation only. Most users never discover it.",
+    why: "Fear of bad edits makes people prompt cautiously. Once you know the rewind menu exists, that fear evaporates. You can restore files only (clean slate), keep the conversation (so Claude remembers what failed), or reset everything. The worst case is two taps and a menu.",
+    example: `# You: "Redesign this entire landing page"
+# Claude: *rewrites everything, tone is wrong*
+#
+# Esc Esc → rewind menu opens
+# Select: turn before the redesign prompt
+# Choose: "Restore code and conversation"
+#
+# Files: restored. Conversation: rolled back.
+# Now try again with better instructions.
+#
+# Or choose "Restore code only" to keep
+# Claude's memory of what went wrong.`
+  },
+  {
+    id: 27,
+    title: "/rewind — same menu as Esc×2, with a key option: restore code only",
+    category: "Workflow",
+    impact: 92,
+    viral: true,
+    insight: "/rewind and Esc×2 open the <strong>same rewind menu</strong>. The power move is choosing <strong>Restore code only</strong> — files reset to the clean state, but Claude keeps the full conversation. It remembers what it tried and what went wrong.",
+    why: "When you restore code only, you get a clean slate to work with AND failure context Claude can draw on. The second attempt is better not because you wrote a better prompt — but because Claude understands what the last one got wrong. You're iterating, not starting over.",
+    example: `# Attempt 1: "Refactor auth to JWT"
+# Result: all tests break
+#
+# /rewind → rewind menu
+# Choose: "Restore code only"
+# Files: back to pre-refactor state
+# Claude: still remembers the JWT attempt failed
+#
+# Attempt 2: "Add JWT but keep backward compat"
+# Result: tests pass, migration path built in
+#
+# The second attempt worked BECAUSE of the first.`
+  },
+  {
+    id: 28,
+    title: "The rewind loop: Instruct → Check → Rewind → Refine",
+    category: "Mental Model",
+    impact: 93,
+    viral: true,
+    insight: "The highest-output Claude Code users don't write perfect prompts. They run a <strong>tight feedback loop</strong>: give a bold instruction, check the result, rewind if needed, refine with specifics. Each cycle takes ~30 seconds and each pass gets better.",
+    why: "Linear prompting (one instruction after another) is fragile — one bad response compounds into a mess. The rewind loop lets you <strong>branch and explore</strong> without consequence. Speed of iteration beats quality of first attempt.",
+    example: `# The loop (30 sec per cycle):
+#
+# INSTRUCT → "Rewrite hero section for enterprise"
+# CHECK    → open file, read output, run tests
+# REWIND   → not right? /rewind. Files reset.
+# REFINE   → "Too corporate. Keep warm tone, add
+#             social proof, enterprise pain points"
+#
+# Cycle 3 is better than any single-shot prompt.
+# Speed of iteration > quality of first attempt.`
+  },
+  {
+    id: 29,
+    title: "When undo is free, experiments are free",
+    category: "Mental Model",
+    impact: 96,
+    viral: true,
+    insight: "This is the mindset shift of Lesson 02. The cost of a bad prompt is <strong>two seconds, not two hours</strong>. That makes ambitious prompts rational. Ask Claude to do the scary thing — migrate a framework, rewrite for a different audience, restructure everything.",
+    why: "Most people under-prompt because they fear the consequences. Undo eliminates the consequences. The builders who ship fast aren't more talented — they're <strong>more willing to experiment</strong>. Cheap undo is what makes that willingness rational.",
+    example: `# Old mindset: "Can you maybe tweak the headline?"
+# New mindset: "Redesign the entire page for
+#               enterprise buyers. Go bold."
+#
+# Why? Because:
+# - If it works → saved hours
+# - If it doesn't → Esc, Esc (2 seconds)
+#
+# The cost of ambition just dropped to zero.
+# Act accordingly.`
+  },
+  {
+    id: 30,
+    title: "Don't hedge your prompts — fire and check",
+    category: "Prompting",
+    impact: 85,
+    viral: true,
+    insight: "Cautious prompts ('maybe just slightly adjust...') produce cautious results. With undo available, <strong>bold prompts are always better</strong> — they either nail it or give Claude rich context for what you actually want when you refine.",
+    why: "Hedging language signals uncertainty to Claude, which makes it play safe. Bold instructions surface the full range of what Claude can do. If the result is wrong, the failure itself becomes useful context for the next attempt.",
+    example: `# Hedging (weak signal):
+# "Could you maybe update the CTA a little?"
+# → Claude makes a tiny, safe change
+#
+# Bold (strong signal):
+# "Rewrite all CTAs for urgency. Trial expires
+#  in 48h. Make the reader feel FOMO."
+# → Claude delivers something you can react to
+#
+# If it overshoots: rewind, say what was too much.
+# Claude adjusts. Net result: better than safe.`
+  },
+  {
+    id: 31,
+    title: "Failure context makes Claude smarter — not you",
+    category: "Mental Model",
+    impact: 82,
+    viral: false,
+    insight: "After a /rewind, Claude has context from the failed attempt. When you tell it <em>why</em> the last try failed, it doesn't just avoid the same mistake — it <strong>builds a better mental model</strong> of what you want.",
+    why: "Most people rewind and re-prompt the same thing hoping for a different result. The magic is in the refinement. Tell Claude: 'The last attempt lost the warm tone' or 'Tests broke because the auth header format changed.' That failure context is the most valuable input you can give.",
+    example: `# Bad rewind: just repeat the same prompt
+# → Claude might produce the same result
+#
+# Good rewind: explain the failure
+# "The previous redesign lost our brand voice.
+#  This time, just update the hero section.
+#  Keep the warm, simple tone from brand notes."
+#
+# Claude reads the same files but approaches
+# them differently — because it knows what
+# missed the mark last time.`
+  },
+  {
+    id: 32,
+    title: "Dual-track learning — same skill, different context",
+    category: "Architecture",
+    impact: 72,
+    viral: false,
+    insight: "Every lesson in the series has a <strong>Builder track</strong> (marketing files, landing pages) and a <strong>Developer track</strong> (APIs, tests, refactors). Both teach the same core skill. The context changes, the workflow doesn't.",
+    why: "Claude Code is an automation engine, not a coding tool. PMs rewind brand copy. Devs rewind test failures. The undo loop is identical. Dual tracks prove the skill is universal — and make the series accessible to non-technical users.",
+    example: `# Lesson 02 — same loop, different files:
+#
+# BUILDER: landing-page.html + brand-notes.md
+#   → redesign goes too corporate
+#   → rewind, refine with brand constraints
+#
+# DEVELOPER: app.js + app.test.js
+#   → JWT refactor breaks tests
+#   → rewind, add backward compatibility
+#
+# Skill learned: Instruct → Check → Rewind → Refine
+# Context: irrelevant. The loop is the lesson.`
+  },
+  {
+    id: 33,
+    title: "Three restore options — code, conversation, or both",
+    category: "Workflow",
+    impact: 80,
+    viral: false,
+    insight: "The rewind menu (Esc×2 or /rewind) gives you <strong>three restore options</strong>: code + conversation together, code only, or conversation only. Each solves a different problem. Power users pick the right one instinctively.",
+    why: "Full restore is a clean do-over. Code-only restore keeps Claude's failure memory — best for informed retries. Conversation-only restore is rare but useful when you've fixed the files manually and just want the chat to reflect that. One menu, three surgical tools.",
+    example: `# Restore code + conversation
+#   → full reset, as if bad prompts never happened
+#   → use when you want a completely clean slate
+#
+# Restore code only  ← the power move
+#   → files back, conversation kept
+#   → Claude remembers what failed
+#   → next prompt benefits from failure context
+#
+# Restore conversation only
+#   → chat rewound, files untouched
+#   → use when you fixed files manually
+#
+# Ctrl+C = interrupt Claude MID-generation
+# Rewind menu = undo AFTER it's done`
   }
 ];
 
