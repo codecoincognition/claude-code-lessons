@@ -2,7 +2,7 @@
 
 **Time:** 20 minutes
 **Builds on:** Lesson 01 (install, @, !, /compact, /cost)
-**What you'll cover:** /rewind, Esc×2 mid-flight cancel, code vs conversation rollback, and why the best Claude Code users break things on purpose.
+**What you'll cover:** Esc×2 and /rewind (the rewind menu), selective rollback (code vs conversation), Ctrl+C for mid-flight cancel, and why the best Claude Code users break things on purpose.
 
 **Pick your track:** This lesson has two starter projects. Choose the one that fits you:
 - **Builder track** → `starter-builder/` (marketing files for a SaaS product)
@@ -85,21 +85,24 @@ Tests will fail — the old token format no longer works, endpoints expect diffe
 
 ---
 
-## Part 2: Esc×2 — Cancel Mid-Flight (5 min)
+## Part 2: Esc×2 — The Rewind Menu (5 min)
 
-The first escape hatch is **Esc×2** — two quick taps of the Escape key while Claude is actively running.
+Press Escape twice — two quick taps:
 
 ```
 Esc  Esc
 ```
 
-This cancels Claude's response **while it's still generating**. If Claude is mid-edit and you see it's going in the wrong direction, Esc×2 stops it immediately. Claude halts, file changes from that partial response are rolled back, and you can give a better instruction.
+This opens the **rewind menu**: a scrollable list of every prompt from your session. You pick the point you want to go back to, then choose what to restore:
 
-> **Important:** Esc×2 works **while Claude is generating**. It's a mid-flight interrupt — like hitting the stop button on a download before it finishes. For undoing a response that has already completed, you'll use `/rewind` in the next part.
+- **Restore code and conversation** — revert both files and chat history to that point
+- **Restore code only** — roll back file changes, keep the conversation
+- **Restore conversation only** — rewind the chat, keep your current files
+- **Summarize from here** — compress conversation from that point (frees up context)
 
-**Try it:** Re-run the risky prompt from Part 1. Watch Claude start making changes — then press Esc twice before it finishes. Claude stops. The partial changes are discarded.
+**Try it now.** Press Esc twice. You'll see a list of your session turns. Select the turn before Part 1's risky prompt and choose **Restore code and conversation**.
 
-Then verify your files are intact:
+Then verify your files are back:
 
 ### Builder Track
 ```
@@ -111,31 +114,31 @@ Your original landing page should be back — navy hero section, Georgia font, "
 ```
 !npm test
 ```
-All tests should pass. The partial JWT changes are gone.
+All tests should pass. The JWT refactor is gone.
 
-**When to use Esc×2:** The moment you see Claude heading in the wrong direction. Don't wait for it to finish making a mess — interrupt early.
+> **To interrupt Claude mid-generation** (while it's still typing), use `Ctrl+C` — that cancels the current response immediately. Esc×2 is for after a response has finished.
 
-> **For completed responses:** Once Claude has finished a response and you want to undo it, that's what `/rewind` is for (next part).
+> **Important limitation:** Checkpointing only tracks files Claude edits directly. If Claude ran bash commands that modified files (e.g. `!mv`, `!rm`, `!cp`), those changes are **not** tracked and cannot be rewound. That's another reason to keep a git baseline.
 
 ---
 
 ## Part 3: Selective Rollback — The Power Move (5 min)
 
-Esc×2 undoes everything — conversation and code together. But sometimes you want to keep one and undo the other. That's what `/rewind` gives you.
+`/rewind` is the typed version of Esc×2 — same menu, same options. The real power isn't in how you open it, it's in **which option you pick**.
 
 ### Try it: Break things again
 
-Give Claude the same risky instruction from Part 1 (or a different one — experiment). Let it make the changes.
-
-Now type:
+Give Claude the same risky instruction from Part 1 (or a different one). Let it fully complete. Then type:
 
 ```
 /rewind
 ```
 
-Claude shows you a list of recent conversation turns. You can choose exactly how far back to rewind.
+The same rewind menu opens. This time, instead of "Restore code and conversation," choose **Restore code only**.
 
-**The key insight:** When you rewind, Claude rolls back the file changes BUT keeps the memory of what happened in the conversation. Claude remembers what it tried. It knows what went wrong. So when you give a new instruction, Claude approaches it with the context of the previous failure.
+**What this does:** Files go back to the clean state. But the conversation — including Claude's memory of the failed attempt — stays intact. So when you give a new instruction, Claude already knows what went wrong.
+
+**The key insight:** Restoring code only gives you a clean slate to work with, while keeping the failure context in the conversation. That failure context is the most valuable input you can give for the next attempt.
 
 ### Builder Track — Rewind and redirect:
 
@@ -218,8 +221,11 @@ Together these mean: give Claude ambitious instructions, check the result, rewin
 
 | Concept | What It Does | When to Use |
 |---------|-------------|-------------|
-| Esc×2 | Cancels Claude's current response mid-generation | The moment you see Claude going in the wrong direction — stop it early |
-| /rewind | Rolls back completed changes; Claude keeps conversation memory | After a response finishes and you want to undo it and try again |
+| Ctrl+C | Cancels Claude's current response mid-generation | The moment you see Claude going in the wrong direction — stop it early |
+| Esc×2 | Opens the rewind menu — choose what to restore | After any completed response you want to undo |
+| /rewind | Same as Esc×2 — typed version, same menu | Same as Esc×2; use whichever is faster for you |
+| Restore code + conversation | Full revert to a previous turn | Clean slate — as if the bad prompts never happened |
+| Restore code only | Roll back files, keep conversation | Files clean, but Claude remembers the failure — best for informed retry |
 | Instruct → Check → Rewind → Refine | The experimentation loop | Every time you give Claude a non-trivial instruction |
 | Undo makes experiments free | Mental model | Whenever you're hesitating to try something bold |
 

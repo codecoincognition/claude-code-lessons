@@ -41,11 +41,14 @@ The real verification is behavioral. You've completed this lesson when:
 
 ## Common Issues
 
-**Esc×2 didn't work**
-Make sure you press Escape twice quickly, not hold it down. It should be two distinct taps.
+**Esc×2 opens the menu but I don't see my earlier turns**
+You need at least one completed Claude response in the session. If you just started, give Claude a prompt first, then try Esc×2.
 
-**/rewind shows no history**
-You need at least one Claude response in the session to rewind. If you just started, there's nothing to rewind yet.
+**Rewind didn't restore my files**
+Check whether Claude used bash commands (like `!mv`, `!rm`, `!cp`) to modify files. Checkpointing only tracks direct file edits — bash-modified files are not tracked. This is why the git baseline at the start of Part 1 matters.
 
 **Claude's second attempt is the same as the first**
-Be more specific about what was wrong. Instead of just rewinding and re-prompting, tell Claude: "The previous attempt did X wrong. This time, do Y instead." The conversation context from the first attempt helps Claude adjust.
+Use "Restore code only" instead of "Restore code and conversation." That way Claude keeps the memory of what failed. Then be specific: tell Claude "The previous attempt did X wrong. This time, do Y instead." The failure context in the conversation is what makes the retry smarter.
+
+**Want to interrupt Claude while it's generating?**
+Use `Ctrl+C` — that's the mid-flight cancel. Esc×2 is for after a response has completed.
