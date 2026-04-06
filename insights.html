@@ -598,6 +598,7 @@
     <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons" target="_blank">github</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-01-your-first" target="_blank">lesson 01</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 02</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 03</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -609,10 +610,10 @@
     <div class="header-badges">
       <span class="badge">Claude Code</span>
       <span class="badge green">Zero to Dangerous</span>
-      <span class="badge muted">Lessons 01 — 02</span>
+      <span class="badge muted">Lessons 01 — 03</span>
     </div>
     <h1>Claude Code <span>Micro Insights</span></h1>
-    <p class="header-sub">33 advanced patterns extracted from <em>Your First 30 Minutes</em> and <em>Undo &amp; Recover</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, and the experimentation loop most guides skip entirely.</p>
+    <p class="header-sub">40 advanced patterns extracted from <em>Your First 30 Minutes</em>, <em>Undo &amp; Recover</em>, and <em>Branch &amp; Experiment</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, and the parallel experimentation loop that turns uncertain decisions into deliberate ones.</p>
     <div class="header-meta">
       <a href="https://substack.com/@vikassah" target="_blank">by Vikas Sah</a>
       <span style="color:var(--border2)">·</span>
@@ -642,7 +643,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">33</span>
+      <span class="stat-val" id="visible-count">40</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -650,11 +651,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">15</span>
+      <span class="stat-val">18</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">7</span>
+      <span class="stat-val">8</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -667,7 +668,7 @@
     <h2>// editorial_map</h2>
     <div class="bottom-grid">
       <div class="panel">
-        <h3>// top_15_viral_picks</h3>
+        <h3>// top_18_viral_picks</h3>
         <ul class="panel-list">
           <li>Agent, not chatbot — the framing that changes everything</li>
           <li>Context is a budget. Treat it like one.</li>
@@ -684,6 +685,9 @@
           <li>When undo is free, experiments are free</li>
           <li>The rewind loop: Instruct → Check → Rewind → Refine</li>
           <li>Don't hedge your prompts — fire and check</li>
+          <li>Branch vs Rewind — two tools, two jobs, zero overlap</li>
+          <li>Set context before you branch — the branch point is a multiplier</li>
+          <li>Don't branch to avoid a decision — branch because contrast is the point</li>
         </ul>
       </div>
       <div class="panel">
@@ -696,13 +700,14 @@
           <li><strong style="color:var(--text)">Claude Code in CI/CD</strong> — headless, pipe-driven automation</li>
           <li><strong style="color:var(--text)">The Rewind Loop</strong> — why iteration speed beats prompt quality</li>
           <li><strong style="color:var(--text)">Cheap Undo, Free Experiments</strong> — the mindset shift that changes how you use AI tools</li>
+          <li><strong style="color:var(--text)">Parallel Experimentation</strong> — /branch as an A/B testing discipline for AI sessions</li>
         </ul>
       </div>
     </div>
 
     <div style="margin-top:16px">
       <div class="panel" style="margin-bottom:0">
-        <h3 style="color:var(--purple)">// brand_pillars [ 4 signature series ]</h3>
+        <h3 style="color:var(--purple)">// brand_pillars [ 5 signature series ]</h3>
         <div class="brand-grid">
           <div class="brand-card">
             <div class="brand-name">#1 — Context Engineering</div>
@@ -719,6 +724,10 @@
           <div class="brand-card">
             <div class="brand-name">#4 — Cheap Undo, Bold Moves</div>
             <div class="brand-desc">Esc×2, /rewind, the Instruct→Check→Rewind→Refine loop. When undo is free, experiments are free. The safety net that turns cautious users into fast shippers.</div>
+          </div>
+          <div class="brand-card">
+            <div class="brand-name">#5 — Parallel Experimentation</div>
+            <div class="brand-desc">/branch, /fork, claude --resume. Set context at the fork point, run both approaches in isolation, compare with intention. The discipline that turns uncertainty from a blocker into a workflow.</div>
           </div>
         </div>
       </div>
@@ -1370,6 +1379,157 @@ Match the existing styling. Don't change anything else."
 #
 # Ctrl+C = interrupt Claude MID-generation
 # Rewind menu = undo AFTER it's done`
+  },
+  // ── LESSON 03 — Branch & Experiment ──────────────────────────
+  {
+    id: 34,
+    title: "Branch vs Rewind — two tools, two jobs, zero overlap",
+    category: "Mental Model",
+    impact: 93,
+    viral: true,
+    insight: "<strong>Rewind</strong> is corrective: you know the last attempt was wrong and you want a do-over. <strong>Branch</strong> is exploratory: both approaches might work and you need to see them side by side to decide. Wrong tool for the job means either wasted rewinding or avoidable guessing.",
+    why: "People confuse these two because they both 'undo something.' They don't. Rewind returns you to a known good state. Branch forks a known good state into two independent futures. One is a repair operation. The other is a parallel experiment. The distinction changes when and why you reach for each one.",
+    example: `# Use Rewind when:
+# → output was wrong, off-brand, or broke tests
+# → you know what went wrong
+# → one direction is clearly better
+#
+# Use Branch when:
+# → you have two genuinely different approaches
+# → you don't know which is better without trying
+# → the cost of the wrong call > 15 minutes
+#
+# Rule of thumb:
+# Rewind = "that was wrong"
+# Branch = "both might be right"`
+  },
+  {
+    id: 35,
+    title: "/branch and /fork are the same command — use whichever you remember",
+    category: "Workflow",
+    impact: 85,
+    viral: true,
+    insight: "<code>/branch [name]</code> and <code>/fork [name]</code> are aliases. They do exactly the same thing: fork the current conversation into a new named session that inherits all context up to this point. The CLI equivalent is <code>claude --continue --fork-session</code>. Pick one and commit to it.",
+    why: "Documentation uses both names inconsistently, which trips people up when they search for 'how to branch in Claude Code.' Knowing they're identical means you can stop second-guessing which is 'official' and just use the one that feels natural.",
+    example: `# These three are identical:
+/branch approach-b
+/fork approach-b
+# (and from terminal):
+# claude --continue --fork-session
+#
+# Resume a named branch:
+claude --resume approach-b
+#
+# See all active sessions:
+claude --resume
+# (shows an interactive session picker)`
+  },
+  {
+    id: 36,
+    title: "Set context before you branch — the branch point is a multiplier",
+    category: "Prompting",
+    impact: 90,
+    viral: true,
+    insight: "Whatever Claude knows at the moment you run <code>/branch</code> is what <em>both</em> branches start with. If you branch before Claude understands the audience, constraints, and existing context, you multiply the confusion. Brief Claude fully, confirm it understood, <em>then</em> branch.",
+    why: "The branch point isn't just a technical checkpoint — it's a knowledge checkpoint. Shared context at the fork means both branches start informed. Context set after the fork only exists in one branch. This is the step most people skip, and it's why their Branch B outputs feel shallow compared to Branch A.",
+    example: `# WRONG: branch immediately, explain in each session
+/branch approach-b
+# Now you're briefing Claude twice, from scratch
+#
+# RIGHT: brief first, confirm understanding, then branch
+@schema-options.md @existing-models.js
+"Before proposing anything, confirm you understand:
+ - what we need to track and why
+ - the volume and retention requirements
+ - the three queries we need to run efficiently"
+# Wait for Claude to confirm → THEN:
+/branch approach-b
+# Both branches inherit the full briefing`
+  },
+  {
+    id: 37,
+    title: "claude --resume — switch between live branches without losing either",
+    category: "Workflow",
+    impact: 78,
+    viral: false,
+    insight: "<code>claude --resume</code> (no name) opens an interactive session picker showing all active branches. <code>claude --resume approach-b</code> jumps directly to a named branch. Sessions persist across terminal restarts. You can compare both outputs, return to the winner, and continue — neither branch is lost.",
+    why: "The comparison step is where branching actually pays off. Most people treat it as a one-way door — they branch but never go back to compare. claude --resume makes the round-trip trivial. Treat your two branches like two drafts open in different tabs.",
+    example: `# From your terminal (outside Claude):
+claude --resume
+# → interactive picker: lists all sessions
+#   approach-a  [last used 3 min ago]
+#   approach-b  [last used 1 min ago]
+#
+# Jump directly to a branch:
+claude --resume approach-b
+#
+# Sessions are tied to the directory
+# where you started. Run from the same
+# folder to find your sessions.`
+  },
+  {
+    id: 38,
+    title: "Don't branch to avoid a decision — branch because contrast is the point",
+    category: "Mental Model",
+    impact: 88,
+    viral: true,
+    insight: "Branching is powerful when you genuinely don't know which approach is better. It's a stall when you already know but want to delay committing. If you can answer 'which direction do I want?' without running both — just iterate in one session. Branching to avoid a decision makes the decision worse, not better.",
+    why: "The anti-pattern: branch on every uncertainty, end up with 6 sessions, compare nothing, pick arbitrarily. Branching has a cost — you need to actually do the comparison and decide. Reserve it for forks where the two paths have meaningfully different tradeoffs and seeing both outputs is genuinely the fastest way to decide.",
+    example: `# Good branch: real tradeoff, unknown winner
+# "Event log vs pre-aggregated counters"
+# → queries look completely different at scale
+# → can't know without seeing the SQL
+#
+# Bad branch: cosmetic variation
+# "Slightly warmer tone vs current tone"
+# → just iterate. One prompt: "make it warmer"
+#
+# Test: could you pick a direction right now?
+# Yes → iterate in one session
+# No  → branch and compare`
+  },
+  {
+    id: 39,
+    title: "Branch B has no memory of Branch A's output — the isolation is intentional",
+    category: "Mental Model",
+    impact: 76,
+    viral: false,
+    insight: "When you branch, the new session starts from the conversation point where you ran <code>/branch</code> — not from Approach A's output. Branch B cannot see what Branch A produced. This isolation is intentional: it means Branch B isn't constrained or biased by what Branch A tried first.",
+    why: "Without isolation, the second approach would be influenced by the first — not a true alternative, just a variation. The branch point snapshot prevents anchoring. Both approaches start from the same briefing and generate their outputs independently. Genuine alternatives, not variations.",
+    example: `# Timeline:
+# [shared] Set context, confirm understanding
+# [shared] Approach A: warm & personal newsletter
+# /branch approach-b   ← fork happens HERE
+#
+# Branch approach-b starts from [shared] context
+# It does NOT inherit: Approach A's output
+#                       Approach A's style choices
+#                       Any implicit constraints from A
+#
+# Result: genuine alternatives, not variations
+# Branch B can go in a completely different direction`
+  },
+  {
+    id: 40,
+    title: "When both branches are viable — pick on the one metric that matters most",
+    category: "Workflow",
+    impact: 71,
+    viral: false,
+    insight: "If both branches produced something good, that's the best-case outcome of branching. Pick the winner by identifying the <strong>one metric that matters most</strong> for this decision. For devs: which queries are simpler at 2x volume? For builders: which subject line would you actually open?",
+    why: "Comparison paralysis is real. When both outputs are viable, people stall. Resolution: narrow to a single deciding criterion before you compare. 'Which is simpler to maintain?' is easier to answer than 'which is better overall?' One sharp question beats a fuzzy scorecard.",
+    example: `# Builder — the one question:
+# "Which subject line would I open if I
+#  didn't know what was inside?"
+# → pick that branch
+#
+# Developer — the one question:
+# "Which queries would I rather maintain
+#  at 2x the current volume?"
+# → pick that schema
+#
+# Then continue in the winning branch:
+# "I'm going with this approach.
+#  Refine: [what specifically to improve]"`
   }
 ];
 

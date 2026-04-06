@@ -11,15 +11,24 @@ This isn't a docs site. It's a practice repo. Each lesson is a folder with a rea
 3. Launch `claude` and complete the challenge
 4. Check your work against the success criteria
 
+## Lessons Available
+
+| # | Lesson | Level | Time | Status |
+|---|--------|-------|------|--------|
+| 01 | [Setup & Your First Session](level-1-first-30-min/01-setup-claude-code/) | First 30 Min | 30 min | ✅ Live |
+| 02 | [Undo & Recover](level-2-first-week/02-undo-and-recover/) | First Week | 20 min | ✅ Live |
+| 03 | [Branch & Experiment](level-2-first-week/03-branch-and-experiment/) | First Week | 15 min | ✅ Live |
+| 04+ | Pick the Right Model, Control Thinking Depth… | First Week | — | Coming soon |
+
 ## Levels
 
-| Level | Name | Who It's For | Lessons |
-|-------|------|-------------|---------|
-| 1 | **First 30 Minutes** | Just installed, want to get productive fast | 01 |
-| 2 | **First Week** | Using daily, hitting friction | 02 |
-| 3 | **First Month** | Ready to configure and customize | 03 |
-| 4 | **Power User** | Want deterministic, reliable workflows | 04 |
-| 5 | **Architect** | Building multi-agent systems and infra | 05 |
+| Level | Name | Who It's For |
+|-------|------|-------------|
+| 1 | **First 30 Minutes** | Just installed, want to get productive fast |
+| 2 | **First Week** | Using daily, hitting friction |
+| 3 | **First Month** | Ready to configure and customize |
+| 4 | **Power User** | Want deterministic, reliable workflows |
+| 5 | **Architect** | Building multi-agent systems and infra |
 
 ## Start Here
 

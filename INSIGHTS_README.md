@@ -20,11 +20,13 @@ No build step. No dependencies. Pure HTML.
 
 ## What's inside
 
-- 25 advanced patterns from **Lesson 01: Your First 30 Minutes**
-- Filterable by category (mental model, workflow, prompting, debugging, automation, integration, architecture)
-- Full-text search
-- Expandable cards with core insight, why it matters, and copy-ready code examples
-- Leverage scores, viral picks, editorial map, brand pillars
+**40 insights** across 3 lessons:
+
+- 25 patterns from **Lesson 01: Your First 30 Minutes** — agent mental model, context budget, @file, !, /compact
+- 8 patterns from **Lesson 02: Undo & Recover** — Esc×2, /rewind, restore options, experimentation mindset
+- 7 patterns from **Lesson 03: Branch & Experiment** — /branch, /fork, claude --resume, parallel experimentation
+
+**Features:** Filterable by 7 categories · Full-text search · Expandable cards with insight, why it matters, and copy-ready examples · Impact scores · 18 viral picks · Editorial map · 5 brand pillars
 
 ---
 
