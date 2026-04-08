@@ -18,7 +18,8 @@ This isn't a docs site. It's a practice repo. Each lesson is a folder with a rea
 | 01 | [Setup & Your First Session](level-1-first-30-min/01-setup-claude-code/) | First 30 Min | 30 min | ✅ Live |
 | 02 | [Undo & Recover](level-2-first-week/02-undo-and-recover/) | First Week | 20 min | ✅ Live |
 | 03 | [Branch & Experiment](level-2-first-week/03-branch-and-experiment/) | First Week | 15 min | ✅ Live |
-| 04+ | Pick the Right Model, Control Thinking Depth… | First Week | — | Coming soon |
+| 04 | [Pick the Right Model for the Job](level-2-first-week/04-pick-the-right-model/) | First Week | 15 min | ✅ Live |
+| 05+ | Control Thinking Depth, Shape the Context Window… | First Week | — | Coming soon |
 
 ## Levels
 

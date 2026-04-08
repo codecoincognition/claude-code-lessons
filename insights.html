@@ -599,6 +599,7 @@
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-01-your-first" target="_blank">lesson 01</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 02</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 03</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 04</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -610,10 +611,10 @@
     <div class="header-badges">
       <span class="badge">Claude Code</span>
       <span class="badge green">Zero to Dangerous</span>
-      <span class="badge muted">Lessons 01 — 03</span>
+      <span class="badge muted">Lessons 01 — 04</span>
     </div>
     <h1>Claude Code <span>Micro Insights</span></h1>
-    <p class="header-sub">40 advanced patterns extracted from <em>Your First 30 Minutes</em>, <em>Undo &amp; Recover</em>, and <em>Branch &amp; Experiment</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, and the parallel experimentation loop that turns uncertain decisions into deliberate ones.</p>
+    <p class="header-sub">46 advanced patterns extracted from <em>Your First 30 Minutes</em>, <em>Undo &amp; Recover</em>, <em>Branch &amp; Experiment</em>, and <em>Pick the Right Model for the Job</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, /model, /effort, and the escalate-then-drop-back habit that keeps every token doing work worth paying for.</p>
     <div class="header-meta">
       <a href="https://substack.com/@vikassah" target="_blank">by Vikas Sah</a>
       <span style="color:var(--border2)">·</span>
@@ -643,7 +644,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">40</span>
+      <span class="stat-val" id="visible-count">46</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -651,11 +652,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">18</span>
+      <span class="stat-val">22</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">8</span>
+      <span class="stat-val">9</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -1530,6 +1531,135 @@ claude --resume approach-b
 # Then continue in the winning branch:
 # "I'm going with this approach.
 #  Refine: [what specifically to improve]"`
+  },
+  {
+    id: 41,
+    title: "Escalate for the decision, drop back for the execution",
+    category: "Workflow",
+    impact: 92,
+    viral: true,
+    insight: "The model-picking habit isn't 'pick the smartest one.' It's matching the model to the work <em>inside</em> your session. Bulk work → Haiku. Everyday judgment → Sonnet. Hard decisions → Opus with <code>/effort high</code>. Then drop back to Sonnet the moment the hard thinking is done so you're not burning Opus tokens on follow-ups.",
+    why: "Most people pick one model and leave it there. That's the sledgehammer problem: using the same tool for every job. One real session has varied work in it — triage, drafts, a judgment call, execution. Using Opus for all of it wastes money. Using Haiku for all of it starves the one moment that actually needed reasoning. Switching is the habit.",
+    example: `# Start on Sonnet (default)
+# Haiku for bulk:
+/model haiku
+"Generate 15 subject lines..."
+
+# Sonnet for judgment:
+/model sonnet
+"Pick the 3 best and write the email body"
+
+# Opus for the hard call:
+/model opus
+/effort high
+"Given the positioning tension — which direction?"
+
+# Drop back:
+/model sonnet
+/effort medium
+# now execute on the decision`
+  },
+  {
+    id: 42,
+    title: "Three models, three mental pictures — intern, senior, principal",
+    category: "Mental Model",
+    impact: 88,
+    viral: true,
+    insight: "Haiku is the fast, cheerful intern — great at volume, shallow on depth. Sonnet is the senior teammate who handles 80% of your work without drama. Opus is the principal you call in when being wrong costs a quarter. Naming the model by its role makes the picking automatic.",
+    why: "Abstract tradeoffs ('speed vs depth', 'cost vs quality') don't guide in-the-moment decisions. Role analogies do. 'Would I ask an intern to make this architecture call?' is an easier question than 'is this task high-complexity enough for Opus?' The analogy collapses the decision into something your gut already knows.",
+    example: `# "Triage 8 bug reports into severity"
+# → would I ask an intern? yes → Haiku
+#
+# "Pick the fix and write the diff"
+# → intern = risky, principal = overkill
+# → Sonnet
+#
+# "Rebuild or replace the job queue?"
+# → intern will hand-wave, Sonnet might
+#   miss the nuance → Opus + effort high`
+  },
+  {
+    id: 43,
+    title: "/effort is the other dial — same model, deeper thinking",
+    category: "Workflow",
+    impact: 84,
+    viral: true,
+    insight: "<code>/effort low|medium|high|max</code> changes how much Claude thinks <em>before</em> answering, without changing the model. <code>high</code> is where Opus actually reasons through tradeoffs instead of just answering fast. <code>max</code> is Opus 4.6-only and applies to the current session only. <code>auto</code> resets to the model default. Most people never touch it — which is why their Opus sessions feel no different from Sonnet.",
+    why: "If you escalate to Opus but leave effort on the default, you're paying Opus prices for Sonnet-level reasoning. The biggest quality jump on hard problems isn't 'switch to Opus' — it's 'switch to Opus AND crank effort to high.' The two dials compound. And when the hard thinking is over, drop both back to default so the cheap follow-ups stay cheap.",
+    example: `# Wrong: Opus on default effort
+/model opus
+"Rebuild or replace the job queue?"
+# → often reads like a fast answer
+# → you paid 5x for little gain
+
+# Right: Opus + high effort
+/model opus
+/effort high
+"Rebuild or replace the job queue?
+ Walk me through what each path costs
+ us in 12 months if we're wrong."
+
+# Then drop back:
+/effort auto   # or: /effort medium`
+  },
+  {
+    id: 44,
+    title: "Ask three questions before every non-trivial task — volume, reversibility, thinking",
+    category: "Prompting",
+    impact: 80,
+    viral: true,
+    insight: "Before any non-trivial prompt, ask: (1) volume or depth? — lots of outputs favor Haiku; one good output favors Sonnet or Opus. (2) reversible or not? — cheap-to-undo favors Sonnet; weeks-to-undo favors Opus. (3) thinking or typing? — typing work (boilerplate, refactors, drafts) goes cheap; thinking work (positioning, architecture) goes Opus + high effort.",
+    why: "The picking decision stalls people because 'which model' is too abstract. Three concrete questions make it mechanical. Once you've answered them, the model picks itself — you're not agonizing, you're matching. This is the move that turns model-switching from 'something I should do' into 'something I do without thinking.'",
+    example: `# Task: "write the ADR decision section"
+# 1. Volume or depth? → depth (one doc)
+# 2. Reversible? → months to undo
+# 3. Thinking or typing? → thinking
+# → Opus + /effort high
+
+# Task: "generate 15 PR titles"
+# 1. Volume or depth? → volume
+# 2. Reversible? → trivially
+# 3. Thinking or typing? → typing
+# → Haiku`
+  },
+  {
+    id: 45,
+    title: "The --model CLI flag sets the starting model — use it for sessions you know will be hard",
+    category: "Workflow",
+    impact: 68,
+    viral: false,
+    insight: "<code>claude --model opus</code> starts a new session on Opus without having to run <code>/model</code> afterward. Aliases <code>sonnet</code>, <code>opus</code>, and <code>haiku</code> are preferred over full model names. Use this when you already know the whole session is going to be reasoning-heavy — ADR reviews, incident postmortems, strategy work — so you don't waste the first few turns on the wrong model.",
+    why: "<code>/model</code> mid-session is the everyday move. <code>--model</code> at launch is the setup move. Pick the right one based on whether the session has mixed work (use <code>/model</code>) or is homogeneous in difficulty (use <code>--model</code>). Small thing, but removes one decision from the workflow for sessions where you already know the shape.",
+    example: `# Mixed session — switch mid-flight
+claude
+> /model haiku
+> /model sonnet
+> /model opus
+
+# Whole session is hard — set at launch
+claude --model opus
+> /effort high
+> "Review this ADR and recommend..."`
+  },
+  {
+    id: 46,
+    title: "Model picker without arguments is the safety net — use it when aliases fail",
+    category: "Debugging",
+    impact: 62,
+    viral: false,
+    insight: "Running <code>/model</code> with no arguments opens an interactive picker that shows <em>exactly</em> which models your plan has access to. If <code>/model haiku</code> errors, this is your recovery move — you'll see whether Haiku is available, and if not, which smallest model you can use instead.",
+    why: "Model availability depends on your plan, region, and account state. Hardcoding a model alias or full name into a prompt or workflow can break silently when access changes. The interactive picker is the ground truth. Treat it as the source of truth when something fails, not the docs.",
+    example: `# /model haiku
+# → error: "Haiku not available on this plan"
+#
+# Recovery:
+/model
+# → interactive picker opens
+# → shows: sonnet, opus (no haiku)
+# → pick sonnet, continue
+#
+# Workflow fix: update the lesson to use
+# the smallest model your plan actually has`
   }
 ];
 
