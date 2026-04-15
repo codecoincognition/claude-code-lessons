@@ -600,6 +600,7 @@
     <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 02</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 03</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 04</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com" target="_blank">lesson 05</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -611,10 +612,10 @@
     <div class="header-badges">
       <span class="badge">Claude Code</span>
       <span class="badge green">Zero to Dangerous</span>
-      <span class="badge muted">Lessons 01 — 04</span>
+      <span class="badge muted">Lessons 01 — 05</span>
     </div>
     <h1>Claude Code <span>Micro Insights</span></h1>
-    <p class="header-sub">46 advanced patterns extracted from <em>Your First 30 Minutes</em>, <em>Undo &amp; Recover</em>, <em>Branch &amp; Experiment</em>, and <em>Pick the Right Model for the Job</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, /model, /effort, and the escalate-then-drop-back habit that keeps every token doing work worth paying for.</p>
+    <p class="header-sub">52 advanced patterns extracted from <em>Your First 30 Minutes</em>, <em>Undo &amp; Recover</em>, <em>Branch &amp; Experiment</em>, <em>Pick the Right Model for the Job</em>, and <em>Effort Control</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, /model, /effort (shape of answers, effort levels, ultrathink), and the escalate-then-drop-back habit that keeps every token doing work worth paying for\.</p>
     <div class="header-meta">
       <a href="https://substack.com/@vikassah" target="_blank">by Vikas Sah</a>
       <span style="color:var(--border2)">·</span>
@@ -644,7 +645,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">46</span>
+      <span class="stat-val" id="visible-count">52</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -652,11 +653,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">22</span>
+      <span class="stat-val">25</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">9</span>
+      <span class="stat-val">12</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -1660,6 +1661,126 @@ claude --model opus
 #
 # Workflow fix: update the lesson to use
 # the smallest model your plan actually has`
+  }
+,
+  {
+    id: 47,
+    title: "/effort shapes the answer itself — not just the length",
+    category: "Mental Model",
+    impact: 95,
+    viral: true,
+    insight: "<strong>Shape, not length.</strong> Low effort is a brainstorm. Medium effort trades reasoning for speed. High effort adds tradeoff analysis — it weighs what each option sacrifices, not just what it gains.",
+    why: "A longer response about the same question is not the same as a deeper answer. Higher effort changes the <em>structure</em> of thinking. You get comparative analysis, explicit constraints, risk weighing. This is worth understanding before you adjust it.",
+    example: `# Low effort (fast, surface-level)
+"How do I add caching?"
+→ "Add Redis, use TTL, cache on user ID"
+
+# Medium effort (balanced, practical)
+"How do I add caching?"
+→ Covers Redis, Memcached, DB query caching
+→ Tradeoffs: speed vs complexity
+
+# High effort (weighs sacrifices)
+"How do I add caching?"
+→ Same 3 options, but also:
+→ "Cache invalidation is hard — here's the cost"
+→ "This trades reliability for speed because..."
+→ "Use this only if latency > X"`
+  },
+  {
+    id: 48,
+    title: "Most people never change their effort default — medium on Pro/Max, high on API/Enterprise",
+    category: "Workflow",
+    impact: 88,
+    viral: true,
+    insight: "The default effort on Claude.com is <strong>medium</strong> (or <em>balanced</em>). On API and Enterprise, it defaults to <strong>high</strong>. Most users accept the default and never adjust per-task.",
+    why: "The default is a reasonable middle ground, but <em>per-task</em> reasoning is cheaper and faster. You should change effort for <em>obvious</em> questions (low) and for <em>the one decision that matters most</em> (high or max).",
+    example: `# These should be LOW effort (save tokens)
+"Format this JSON"
+"Scan this log for errors"
+"Look up the syntax for..."
+
+# This should be HIGH or MAX effort
+"How do I architect a real-time system?"
+(This is the one architectural decision you'll regret if it's wrong)`
+  },
+  {
+    id: 49,
+    title: "Low effort is the right call for obvious tasks — scanning, formatting, lookups",
+    category: "Prompting",
+    impact: 85,
+    viral: false,
+    insight: "If you know the answer is straightforward and you're asking Claude to <strong>execute a known task</strong> (not reason about unknowns), use low effort. Examples: code formatting, log scanning, regex help, syntax lookups, transcription, simple refactoring.",
+    why: "Low effort cuts reasoning overhead for tasks that don't need it. You get the answer faster and cheaper. The only risk is if the task is subtly complex, but you can tell from the output in milliseconds.",
+    example: `/effort low
+
+# These are safe at low effort:
+"Extract all error messages from this log"
+"Reformat this function to use async/await"
+"Write a regex for US phone numbers"
+"What's the npm syntax for..."
+
+# Low effort fails silently on nuanced questions:
+"How do I design a database for..." (needs high)
+"Why is this code crashing?" (needs medium+ to diagnose)`
+  },
+  {
+    id: 50,
+    title: "High effort adds tradeoff reasoning — it weighs what each option sacrifices",
+    category: "Prompting",
+    impact: 87,
+    viral: false,
+    insight: "At high effort, Claude doesn't just list options. It compares <em>what you give up</em> when you choose each option. This is what separates a list from advice.",
+    why: "Tradeoffs are where real decisions happen. 'Use Redis' is not a decision. 'Use Redis because latency < 50ms, but you're accepting operational complexity and cache invalidation risk' — that's a decision you can own.",
+    example: `/effort high
+
+# For this question:
+"Should I use SQL or NoSQL?"
+
+# Low effort: "Use SQL for structured data, NoSQL for flexible..."
+# High effort: "Use SQL if: your schema is stable (sacrifice: 
+# flexibility). Use NoSQL if: you need horizontal scale (sacrifice: 
+# ACID guarantees and query flexibility). Pick based on which 
+# sacrifice hurts less."`
+  },
+  {
+    id: 51,
+    title: "Max effort (Opus 4.6 only, session-scoped) is for the one decision that matters most",
+    category: "Mental Model",
+    impact: 92,
+    viral: false,
+    insight: "<strong>Max effort is expensive and worth it exactly once.</strong> Use it for the architectural decision, the business model choice, or the hire that will define the next 6 months. Max effort (Opus only) spends more time thinking, more tokens, deeper analysis.",
+    why: "Max effort costs more in both money and latency. Don't use it for every decision. Use it for <em>the</em> decision. Session-scoped means: set it once, it affects the whole session until you change it.",
+    example: `# START of new session
+
+/effort max
+"What's the right tech stack for a real-time collab platform?"
+→ Deep analysis, compares tradeoffs, tests assumptions
+
+# After that decision is made:
+/effort medium
+"Build the auth schema"
+
+/effort low
+"Format the code"`
+  },
+  {
+    id: 52,
+    title: ""ultrathink" triggers high effort for a single turn without changing session settings",
+    category: "Workflow",
+    impact: 81,
+    viral: false,
+    insight: "Use <strong>@ultrathink</strong> in the @ menu (or type it in the prompt) to trigger high-effort thinking for <em>one question only</em>. Session effort setting stays unchanged.",
+    why: "Sometimes you need deep reasoning for one question, then go back to balanced/low effort for the rest of the session. Ultrathink is the lightweight version of <code>/effort high</code> for single-turn use.",
+    example: `# Baseline session effort = medium
+
+# One hard decision:
+"@ultrathink — What's the right data model for..."
+→ Returns high-effort reasoning
+
+# Next question reverts to medium:
+"How do I test this?"
+→ Medium effort (normal session default)`
   }
 ];
 

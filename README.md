@@ -19,7 +19,8 @@ This isn't a docs site. It's a practice repo. Each lesson is a folder with a rea
 | 02 | [Undo & Recover](level-2-first-week/02-undo-and-recover/) | First Week | 20 min | ✅ Live |
 | 03 | [Branch & Experiment](level-2-first-week/03-branch-and-experiment/) | First Week | 15 min | ✅ Live |
 | 04 | [Pick the Right Model for the Job](level-2-first-week/04-pick-the-right-model/) | First Week | 15 min | ✅ Live |
-| 05+ | Control Thinking Depth, Shape the Context Window… | First Week | — | Coming soon |
+| 05 | [Control Thinking Depth](level-2-first-week/05-control-thinking-depth/) | First Week | 15 min | ✅ Live |
+| 06+ | Mid-Task Corrections, Resume Where You Left Off… | First Week | — | Coming soon |
 
 ## Levels
 
