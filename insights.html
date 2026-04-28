@@ -600,7 +600,8 @@
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-02-the-undo-button" target="_blank">lesson 02</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-03-the-ab-test" target="_blank">lesson 03</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-04-stop-running" target="_blank">lesson 04</a>
-    <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons" target="_blank">lesson 05</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-05-stop-overthinking" target="_blank">lesson 05</a>
+    <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons/tree/main/06-mid-task-corrections" target="_blank">lesson 06</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -645,7 +646,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">52</span>
+      <span class="stat-val" id="visible-count">60</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -653,11 +654,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">21</span>
+      <span class="stat-val">27</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">12</span>
+      <span class="stat-val">17</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -670,7 +671,7 @@
     <h2>// editorial_map</h2>
     <div class="bottom-grid">
       <div class="panel">
-        <h3>// top_21_viral_picks</h3>
+        <h3>// top_27_viral_picks</h3>
         <ul class="panel-list">
           <li>Agent, not chatbot — the framing that changes everything</li>
           <li>Context is a budget. Treat it like one.</li>
@@ -1781,6 +1782,146 @@ claude --model opus
 # Next question reverts to medium:
 "How do I test this?"
 → Medium effort (normal session default)`
+  },
+  {
+    id: 53,
+    title: "/btw is the sticky note you pass during a meeting — read, answered, thrown away",
+    category: "Mental Model",
+    impact: 93,
+    viral: true,
+    insight: "<strong>/btw</strong> is Claude Code's side channel. Type it before any question to get an answer in a temporary overlay — no conversation history, no tool access, no context cost. Press Space, Enter, or Escape to dismiss.",
+    why: "Every normal side question costs you twice: it consumes context <em>and</em> breaks Claude's train of thought. /btw eliminates both costs. The mental model is a sticky note — read, answered, discarded.",
+    example: `# Claude is writing email 3 of 5...
+# You wonder about CAN-SPAM rules.
+
+# WRONG: type question in main prompt
+"What does CAN-SPAM require for unsubscribe links?"
+→ Claude answers. Sequence derailed. 5 min rework.
+
+# RIGHT: use /btw
+/btw What does CAN-SPAM require for unsubscribe links?
+→ Overlay appears. Press Space. Sequence continues.`
+  },
+  {
+    id: 54,
+    title: "Full context, no tools — that is the entire /btw mental model",
+    category: "Mental Model",
+    impact: 91,
+    viral: true,
+    insight: "/btw sees <strong>everything</strong> in your conversation — every file loaded with @, every decision, every line of code. But it <strong>cannot act</strong>. No file reads, no commands, no web searches. It answers from memory only.",
+    why: "This constraint is the design, not a limitation. Side questions that need tools are not side questions — they are tasks. Tasks deserve a place in the conversation because Claude needs to account for them going forward.",
+    example: `# /btw CAN answer (already in context):
+/btw Which messaging pillar did we use in email 1?
+/btw What is the difference between EXPIRE and EXPIREAT?
+
+# /btw CANNOT answer (needs tools):
+/btw Read the migration plan and count the open questions
+/btw Run the test suite and show failures
+→ Use a normal prompt for these instead`
+  },
+  {
+    id: 55,
+    title: "The filter: does the answer change what Claude does next?",
+    category: "Workflow",
+    impact: 88,
+    viral: true,
+    insight: "If <strong>no</strong> — use /btw. Quick lookups, factual checks, jargon definitions. These inform <em>your</em> thinking but do not change Claude's task. If <strong>yes</strong> — use a normal prompt. Decisions, direction changes, anything needing tool access.",
+    why: "Most side questions do not change the task. They are things you would otherwise Google or context-switch for. Routing them through /btw keeps your session clean and Claude focused.",
+    example: `# Does NOT change the task → /btw
+/btw What open rate is good for SaaS onboarding?
+/btw What status code should a token exchange return?
+
+# DOES change the task → normal prompt
+"Switch email 3 to focus on the async feature"
+"Use Redis Cluster instead of a single instance"
+→ These belong in conversation history`
+  },
+  {
+    id: 56,
+    title: "Side questions reuse the conversation cache — they cost almost nothing",
+    category: "Workflow",
+    impact: 85,
+    viral: true,
+    insight: "/btw reuses the parent conversation's data already in memory. It does not rebuild context from scratch. Run <strong>/cost</strong> before and after a few side questions — the difference is negligible.",
+    why: "A normal side question forces Claude to process the entire history again, generate a response, then process history <em>again</em> when you re-prompt. Three passes instead of one lightweight overlay.",
+    example: `# Before /btw questions:
+/cost → $0.42 session cost
+
+# Ask 5 /btw questions during a task...
+
+# After:
+/cost → $0.43 session cost
+→ Five answers for one cent`
+  },
+  {
+    id: 57,
+    title: "You can ask /btw while Claude is still generating",
+    category: "Workflow",
+    impact: 82,
+    viral: true,
+    insight: "You do not have to wait for Claude to finish its current response. While Claude is writing code or drafting content, type <strong>/btw</strong> and your question. The overlay appears with your answer while the main generation continues.",
+    why: "This turns dead time into productive time. Instead of watching Claude write a function, clarify your own thinking with a quick lookup. Read the answer, dismiss it, Claude finishes, you move on.",
+    example: `# Claude is generating a Redis session store...
+# While it types, you ask:
+/btw What is the standard timeout for Redis health checks?
+→ Overlay: "Typically 1-3 seconds for health checks..."
+→ Press Space to dismiss
+→ Claude finishes the session store, uninterrupted`
+  },
+  {
+    id: 58,
+    title: "/btw is single-response only — no follow-ups, no multi-turn",
+    category: "Workflow",
+    impact: 78,
+    viral: false,
+    insight: "/btw gives you <strong>one answer</strong>. If your question needs back-and-forth clarification, use a normal prompt instead. The tradeoff: it enters conversation history and costs context, but you get full multi-turn interaction and tool access.",
+    why: "This is a feature, not a limitation. Single-response keeps the side channel lightweight. If a question is complex enough to need follow-ups, it is not a side question — it is a task.",
+    example: `# Good /btw use (one answer is enough):
+/btw What does CAN-SPAM require for unsubscribe links?
+
+# Bad /btw use (needs follow-up):
+/btw Explain the tradeoffs between Redis Cluster and Sentinel
+→ "Well, it depends on your replication needs..."
+→ You want to ask "what about our specific setup?"
+→ Cannot follow up. Use a normal prompt instead.`
+  },
+  {
+    id: 59,
+    title: "Your conversation stays clean — /btw never pollutes history",
+    category: "Mental Model",
+    impact: 86,
+    viral: true,
+    insight: "Every /btw question and answer is <strong>ephemeral</strong>. Nothing enters your conversation history. Your main task continues as if the side question never happened. No context waste, no derailed tasks.",
+    why: "Context pollution is the silent killer of long sessions (Lesson 01). /btw prevents the most common source: the quick factual lookup that turns into a permanent resident of your conversation.",
+    example: `# Session with 3 normal side questions:
+→ 6 extra messages in history (3 questions + 3 answers)
+→ Context used: ~2,000 tokens
+→ Claude lost track of task twice
+
+# Same session with /btw:
+→ 0 extra messages in history
+→ Context used: ~0 tokens
+→ Claude never lost track of task`
+  },
+  {
+    id: 60,
+    title: "Match the channel to the question — /btw, normal prompt, /branch, or Esc+Esc",
+    category: "Workflow",
+    impact: 84,
+    viral: false,
+    insight: "Lesson 06 completes a toolkit: <strong>/btw</strong> for ephemeral side questions, <strong>normal prompts</strong> for task-changing decisions, <strong>/branch</strong> for parallel exploration, <strong>Esc+Esc</strong> for undo, <strong>/compact</strong> to free context.",
+    why: "Each channel has a cost profile. /btw costs almost nothing. Normal prompts cost context and momentum. /branch costs a full context copy. Matching the channel to the question is the meta-skill.",
+    example: `# Quick factual lookup → /btw
+/btw What is the default Redis pool size?
+
+# Task-changing decision → normal prompt
+"Use Redis Cluster instead of standalone"
+
+# Want to explore without risk → /branch
+/branch "Try a different auth strategy"
+
+# Undo last action → Esc + Esc
+# Free up context → /compact`
   }
 ];
 

@@ -2,7 +2,7 @@
 
 **Go from zero to dangerous with Claude Code — one hands-on lesson at a time.**
 
-This isn't a docs site. It's a practice repo. Each lesson is a folder with a real mini-codebase and a challenge you complete *inside Claude Code*. You learn by doing, not reading.
+This is not a docs site. It is a practice repo. Each lesson is a folder with a real mini-codebase and a challenge you complete *inside Claude Code*. You learn by doing, not reading.
 
 ## How It Works
 
@@ -20,11 +20,12 @@ This isn't a docs site. It's a practice repo. Each lesson is a folder with a rea
 | 03 | [Branch & Experiment](level-2-first-week/03-branch-and-experiment/) | First Week | 15 min | ✅ Live |
 | 04 | [Pick the Right Model for the Job](level-2-first-week/04-pick-the-right-model/) | First Week | 15 min | ✅ Live |
 | 05 | [Control Thinking Depth](level-2-first-week/05-control-thinking-depth/) | First Week | 15 min | ✅ Live |
-| 06+ | Mid-Task Corrections, Resume Where You Left Off… | First Week | — | Coming soon |
+| 06 | [Mid-Task Corrections](06-mid-task-corrections/) | First Week | 10 min | ✅ Live |
+| 07+ | Resume Where You Left Off… | First Week | — | Coming soon |
 
 ## Levels
 
-| Level | Name | Who It's For |
+| Level | Name | Who It Is For |
 |-------|------|-------------|
 | 1 | **First 30 Minutes** | Just installed, want to get productive fast |
 | 2 | **First Week** | Using daily, hitting friction |
@@ -39,7 +40,7 @@ cd level-1-first-30-min/01-setup-claude-code
 cat CHALLENGE.md
 ```
 
-Then follow the instructions. That's it.
+Then follow the instructions. That is it.
 
 ## Prerequisites
 
