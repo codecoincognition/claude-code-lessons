@@ -601,7 +601,8 @@
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-03-the-ab-test" target="_blank">lesson 03</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-04-stop-running" target="_blank">lesson 04</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-05-stop-overthinking" target="_blank">lesson 05</a>
-    <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons/tree/main/06-mid-task-corrections" target="_blank">lesson 06</a>
+    <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-06-the-side-question" target="_blank">lesson 06</a>
+    <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons/tree/main/07-resume-long-prompts-remote" target="_blank">lesson 07</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -646,7 +647,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">60</span>
+      <span class="stat-val" id="visible-count">68</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -654,11 +655,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">27</span>
+      <span class="stat-val">33</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">17</span>
+      <span class="stat-val">20</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -671,7 +672,7 @@
     <h2>// editorial_map</h2>
     <div class="bottom-grid">
       <div class="panel">
-        <h3>// top_27_viral_picks</h3>
+        <h3>// top_31_viral_picks</h3>
         <ul class="panel-list">
           <li>Agent, not chatbot — the framing that changes everything</li>
           <li>Context is a budget. Treat it like one.</li>
@@ -691,6 +692,16 @@
           <li>Branch vs Rewind — two tools, two jobs, zero overlap</li>
           <li>Set context before you branch — the branch point is a multiplier</li>
           <li>Don't branch to avoid a decision — branch because contrast is the point</li>
+          <li>Match the channel to the question — /btw, prompt, /branch, Esc+Esc</li>
+          <li>/btw costs almost nothing — use it for every factual side question</li>
+          <li>Lesson 06 completes the correction toolkit</li>
+          <li>Context cost of a new session vs /btw: catastrophic vs near-zero</li>
+          <li>--resume turns sessions into save files, not chat threads</li>
+          <li>Name every session you plan to return to</li>
+          <li>Session permissions reset on resume — safety, not a bug</li>
+          <li>Ctrl+G — the editor escape hatch for complex prompts</li>
+          <li>/remote-control turns your phone into a command center</li>
+          <li>The session lifecycle: start → compose → monitor → resume</li>
         </ul>
       </div>
       <div class="panel">
@@ -704,6 +715,9 @@
           <li><strong style="color:var(--text)">The Rewind Loop</strong> — why iteration speed beats prompt quality</li>
           <li><strong style="color:var(--text)">Cheap Undo, Free Experiments</strong> — the mindset shift that changes how you use AI tools</li>
           <li><strong style="color:var(--text)">Parallel Experimentation</strong> — /branch as an A/B testing discipline for AI sessions</li>
+          <li><strong style="color:var(--text)">Sessions as Workspaces</strong> — --resume, Ctrl+G, /remote-control and the session lifecycle</li>
+          <li><strong style="color:var(--text)">The Resume Decision</strong> — when to resume vs start fresh, context window economics</li>
+          <li><strong style="color:var(--text)">Mobile-First AI Ops</strong> — /remote-control workflows for monitoring long-running tasks</li>
         </ul>
       </div>
     </div>
@@ -1922,6 +1936,165 @@ claude --model opus
 
 # Undo last action → Esc + Esc
 # Free up context → /compact`
+  },
+
+  // ── Lesson 07: Resume, Long Prompts, and Remote Control ──
+
+  {
+    id: 61,
+    title: "--resume turns sessions into save files, not chat threads",
+    category: "Mental Model",
+    impact: 95,
+    viral: true,
+    insight: "<strong>--resume</strong> loads your full conversation history — every file reference, every decision, every constraint Claude learned. Your session is a workspace you leave and return to, not a chat you throw away.",
+    why: "Without --resume, every new session starts cold. You re-explain decisions, re-load files, re-prompt architecture. That rework tax compounds — hours per week for daily users.",
+    example: `# Name your session when you start
+claude --name "rate-limiter"
+
+# Work for an hour, then exit
+
+# Next day: resume by name
+claude --resume rate-limiter
+
+# Or resume most recent session
+claude -c
+
+# Or browse all sessions with picker
+claude --resume`
+  },
+  {
+    id: 62,
+    title: "Name every session you plan to return to",
+    category: "Workflow",
+    impact: 88,
+    viral: true,
+    insight: "<strong>--name</strong> gives your session a label you can resume by tomorrow. Without a name, you are hunting through a picker. With a name, resuming is one command: <code>claude --resume rate-limiter</code>.",
+    why: "Unnamed sessions pile up fast. The interactive picker (claude --resume with no arg) works, but naming removes friction from the most common case: picking up where you left off.",
+    example: `# Good: name matches the work
+claude --name "auth-refactor"
+claude --name "q3-roadmap-review"
+claude --name "blog-series-draft"
+
+# Tomorrow morning:
+claude --resume auth-refactor`
+  },
+  {
+    id: 63,
+    title: "Session permissions reset on resume — that is a safety feature, not a bug",
+    category: "Mental Model",
+    impact: 82,
+    viral: true,
+    insight: "When you resume a session, Claude remembers the conversation but forgets the approvals. It asks permission again before writing files or running commands. This is deliberate — you get a fresh approval surface each time.",
+    why: "A resumed session might try to write to files that changed while you were away. Re-approving forces you to confirm Claude is still acting on the right state. It prevents silent overwrites after context drift.",
+    example: `# Resume a session from yesterday
+claude --resume rate-limiter
+
+# Claude remembers your rate limiter discussion
+# But when it tries to write rate_limiter.py:
+# → "Allow Claude to write to rate_limiter.py?" (Y/n)
+# You re-approve with full awareness of current state`
+  },
+  {
+    id: 64,
+    title: "Ctrl+G — the editor escape hatch for prompts that outgrow the terminal",
+    category: "Workflow",
+    impact: 90,
+    viral: true,
+    insight: "<strong>Ctrl+G</strong> opens your default text editor (<code>$EDITOR</code>) for prompt composition. Write multi-paragraph briefs, paste from documents, use full editing power. Save and quit — Claude gets the whole thing.",
+    why: "Complex tasks need complex prompts. A three-paragraph spec with bullet points is painful to type in a single terminal line. The terminal is for quick commands. The editor is for real instructions.",
+    example: `# Press Ctrl+G in any Claude Code session
+# Your $EDITOR opens (vim, nano, VS Code, etc.)
+
+# Write your multi-step prompt:
+# 1. Review the product roadmap
+# 2. Draft an executive summary
+# 3. Flag the at-risk items
+# 4. Suggest mitigations
+
+# Save and quit → Claude receives it all
+
+# Alternatives if Ctrl+G does not fit:
+# \\ + Enter → works everywhere
+# Shift+Enter → iTerm2, WezTerm, Ghostty
+# Ctrl+J → any terminal, no config`
+  },
+  {
+    id: 65,
+    title: "/remote-control turns your phone into a session command center",
+    category: "Workflow",
+    impact: 85,
+    viral: true,
+    insight: "Type <strong>/remote-control</strong> (or <strong>/rc</strong>) in a session. QR code and URL appear. Scan from your phone — you are now connected. Both devices see every message, both can send prompts, everything stays in sync.",
+    why: "Long tasks do not need you at your desk. Start a test suite, walk to a meeting, check progress from your phone. No context lost, no re-prompting, no 'where was I?' moment.",
+    example: `# In your terminal session:
+/remote-control
+
+# Or start with remote control enabled:
+claude --rc "My Project"
+
+# Scan QR code with your phone
+# Type prompts from either device
+# Both stay in sync
+
+# Server mode for persistent access:
+claude remote-control --name "Backend" --capacity 4`
+  },
+  {
+    id: 66,
+    title: "The session lifecycle: start → compose → monitor → resume",
+    category: "Mental Model",
+    impact: 92,
+    viral: true,
+    insight: "Three features form a loop: <strong>start</strong> a named session with remote control, <strong>compose</strong> your brief with Ctrl+G, <strong>monitor</strong> from your phone, <strong>resume</strong> the next day. Your work is never bounded by a single sitting.",
+    why: "Most people treat Claude Code sessions as disposable chat threads. The lifecycle model turns them into persistent workspaces — desks you leave at the end of the day and return to in the morning.",
+    example: `# The full lifecycle:
+claude --name "q3-review" --rc   # start
+# Press Ctrl+G, paste brief       # compose
+# Scan QR, walk to meeting         # monitor
+# Next day:
+claude --resume q3-review          # resume
+
+# Multi-day refactors, week-long content
+# series, ongoing reviews — they all
+# live in sessions you return to.`
+  },
+  {
+    id: 67,
+    title: "Resume when context is relevant. Start fresh when it is stale.",
+    category: "Workflow",
+    impact: 86,
+    viral: false,
+    insight: "The filter for resume vs. fresh start is simple: <strong>Is the previous context still relevant?</strong> If yes, resume — Claude's memory of your decisions is an asset. If no, use <code>/compact</code> to save a summary and start clean.",
+    why: "A session at 80%+ context window capacity degrades. A session where you pivoted direction carries baggage that confuses more than it helps. Knowing when NOT to resume is as important as knowing how.",
+    example: `# Context still relevant? Resume.
+claude --resume auth-refactor
+
+# Direction changed or context at 80%+?
+# In the old session:
+/compact
+# Then start fresh:
+claude --name "auth-refactor-v2"
+
+# Carry key decisions forward manually
+# in your first prompt to the new session.`
+  },
+  {
+    id: 68,
+    title: "Show Claude's last response in your editor for context while composing",
+    category: "Workflow",
+    impact: 78,
+    viral: false,
+    insight: "In <code>/config</code>, enable 'Show last response in external editor.' When you press Ctrl+G, Claude's previous reply appears as commented context above your prompt. You can reference it while composing without switching windows.",
+    why: "Long prompts often need to reference what Claude just said. Without this setting, you toggle between terminal and editor. With it, the context is right there — commented out so it does not get sent as part of your prompt.",
+    example: `# In /config, enable:
+# "Show last response in external editor"
+
+# Now when you press Ctrl+G, your editor shows:
+# // Claude's previous response here
+# // as commented context...
+#
+# Your new prompt goes here.
+# You can see what Claude said while writing.`
   }
 ];
 
