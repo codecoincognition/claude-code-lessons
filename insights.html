@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code — Micro Insights | Code Coin Cognition</title>
-<meta name="description" content="33 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
+<meta name="description" content="76 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
 <meta property="og:title" content="Claude Code Micro Insights">
-<meta property="og:description" content="33 advanced patterns for Claude Code. Agent model, context budget, undo & rewind, experimentation loops, and more.">
+<meta property="og:description" content="76 advanced patterns for Claude Code. Agent model, context budget, undo & rewind, experimentation loops, project instructions, and more.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -603,6 +603,7 @@
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-05-stop-overthinking" target="_blank">lesson 05</a>
     <a class="topbar-link" href="https://codecoincognition.substack.com/p/claude-code-lesson-06-the-side-question" target="_blank">lesson 06</a>
     <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons/tree/main/07-resume-long-prompts-remote" target="_blank">lesson 07</a>
+    <a class="topbar-link" href="https://github.com/codecoincognition/claude-code-lessons/tree/main/08-teach-claude-your-project" target="_blank">lesson 08</a>
     <a class="topbar-link primary" href="https://codecoincognition.substack.com" target="_blank">subscribe</a>
   </div>
 </nav>
@@ -647,7 +648,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">68</span>
+      <span class="stat-val" id="visible-count">76</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -655,11 +656,11 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">33</span>
+      <span class="stat-val">39</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
-      <span class="stat-val">20</span>
+      <span class="stat-val">23</span>
       <span class="stat-label">article-ready</span>
     </div>
   </div>
@@ -672,7 +673,7 @@
     <h2>// editorial_map</h2>
     <div class="bottom-grid">
       <div class="panel">
-        <h3>// top_31_viral_picks</h3>
+        <h3>// top_39_viral_picks</h3>
         <ul class="panel-list">
           <li>Agent, not chatbot — the framing that changes everything</li>
           <li>Context is a budget. Treat it like one.</li>
@@ -702,6 +703,12 @@
           <li>Ctrl+G — the editor escape hatch for complex prompts</li>
           <li>/remote-control turns your phone into a command center</li>
           <li>The session lifecycle: start → compose → monitor → resume</li>
+          <li>CLAUDE.md is the onboarding document Claude reads before every session</li>
+          <li>Every convention Claude violates is a line you forgot to write</li>
+          <li>.claude/rules/ splits your briefing into modular files</li>
+          <li>Path scoping loads rules only when relevant</li>
+          <li>/init generates the skeleton — you add the brain</li>
+          <li>CLAUDE.md is alive — update it every time Claude gets something wrong</li>
         </ul>
       </div>
       <div class="panel">
@@ -2095,6 +2102,173 @@ claude --name "auth-refactor-v2"
 #
 # Your new prompt goes here.
 # You can see what Claude said while writing.`
+  },
+
+  // ── Lesson 08: Teach Claude Your Project ──
+
+  {
+    id: 69,
+    title: "CLAUDE.md is the onboarding document Claude reads before every session",
+    category: "Mental Model",
+    impact: 96,
+    viral: true,
+    insight: "<strong>CLAUDE.md</strong> at your project root is loaded automatically at session start. Put your stack, build commands, naming conventions, and architectural decisions in it once. Claude knows them forever — across every session, every resume, every new terminal window.",
+    why: "Without CLAUDE.md, you re-explain conventions in every prompt. With it, Claude follows your rules from the first message. The teams that get the most value from Claude Code are not the ones with the best prompts — they are the ones with the best CLAUDE.md files.",
+    example: `# CLAUDE.md at project root
+
+## Stack
+Python 3.12, FastAPI, SQLAlchemy 2.0, PostgreSQL 16
+
+## Build and Test
+pytest                    # Run tests
+uvicorn app.main:app      # Dev server
+
+## Code Conventions
+- Use get_db dependency, never import Session
+- Use str | None, not Optional[str]
+- Google-style docstrings on all public functions`
+  },
+  {
+    id: 70,
+    title: "Every convention Claude violates is a line you forgot to write",
+    category: "Mental Model",
+    impact: 93,
+    viral: true,
+    insight: "When Claude uses the wrong import pattern, the wrong naming convention, or the wrong error format — that is not a Claude problem. That is a briefing problem. Fix your CLAUDE.md, not your prompt. The fix propagates to every future session.",
+    why: "Correcting Claude's output repeatedly is exhausting. Fixing the source once is permanent. The first-try test reveals the gaps: give Claude a task, check if it followed your conventions, add the missing rules to CLAUDE.md.",
+    example: `# The first-try test:
+# 1. Write your CLAUDE.md
+# 2. Start a fresh session
+# 3. Give Claude a typical task
+# 4. Check: did it follow your conventions?
+#
+# If not, the gap is in your instructions.
+# Fix CLAUDE.md, not the prompt.
+# The fix propagates to every future session.`
+  },
+  {
+    id: 71,
+    title: ".claude/rules/ splits your briefing into modular, maintainable files",
+    category: "Workflow",
+    impact: 88,
+    viral: true,
+    insight: "When CLAUDE.md grows past 100 lines, split it into <code>.claude/rules/</code> files — one per concern. <code>python-style.md</code>, <code>testing.md</code>, <code>security.md</code>. All load at session start. Same behavior, better maintenance.",
+    why: "A 400-line CLAUDE.md is painful to review, update, and share. Modular rules let different team members own different concerns. Testing rules in one file, security rules in another, code style in a third.",
+    example: `.claude/rules/
+├── python-style.md     # Imports, type hints, naming
+├── typescript-style.md # Components, exports, props
+├── testing.md          # Fixtures, coverage, naming
+└── security.md         # Auth, validation, error handling
+
+# All loaded at session start automatically.
+# No configuration needed.`
+  },
+  {
+    id: 72,
+    title: "Path scoping loads rules only when relevant — keep your context lean",
+    category: "Workflow",
+    impact: 85,
+    viral: true,
+    insight: "Add YAML frontmatter with <code>paths:</code> to scope a rule file to specific file patterns. Testing rules only load when Claude reads test files. Security rules only load for API files. Your context budget stays focused.",
+    why: "Not every rule applies to every file. Loading all rules always wastes context. Path scoping lets Claude carry only the relevant instructions, improving both focus and response quality.",
+    example: `# .claude/rules/testing.md
+---
+paths:
+  - "backend/tests/**/*.py"
+  - "frontend/src/**/*.test.ts"
+---
+
+# Testing Rules
+- Use fixtures from conftest.py
+- Never create raw database sessions
+- test_{action}_{scenario}_{expected_result}
+
+# Caveat: loads on reads, not writes.
+# Keep critical rules unscoped.`
+  },
+  {
+    id: 73,
+    title: "settings.json is the guardrail layer — env vars and tool permissions",
+    category: "Workflow",
+    impact: 80,
+    viral: false,
+    insight: "<code>.claude/settings.json</code> controls what Claude can do. The <code>env</code> section injects variables into every shell command. The <code>permissions</code> section controls tool access: allow (runs freely), ask (prompts each time), deny (blocks entirely).",
+    why: "CLAUDE.md tells Claude what to do. settings.json tells Claude what it can do. Together they form the knowledge layer (CLAUDE.md + rules) and the guardrail layer (settings.json).",
+    example: `// .claude/settings.json
+{
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "permissions": {
+    "tools": [
+      { "tool": "bash", "mode": "allow" },
+      { "tool": "write", "mode": "ask" }
+    ]
+  }
+}
+
+# Run /status to verify settings are active`
+  },
+  {
+    id: 74,
+    title: "/init generates the skeleton — you add the brain",
+    category: "Workflow",
+    impact: 82,
+    viral: true,
+    insight: "Run <code>/init</code> to auto-generate a starter CLAUDE.md from your project files. It catches the obvious (stack, build commands, entry points) but misses the subtle (your naming conventions, your error format, the import rule every PR reviewer catches). Your job: review the skeleton and add the brain.",
+    why: "Starting from blank is the biggest barrier to creating CLAUDE.md. /init removes that barrier by giving you a scaffold. But the high-value content — team conventions, architectural decisions, the rules Claude keeps getting wrong — those come from you.",
+    example: `# In any project directory:
+claude
+/init
+
+# Claude scans package.json, pyproject.toml,
+# directory structure, git history.
+# Generates starter CLAUDE.md with:
+# - Detected stack and versions
+# - Build commands
+# - Directory layout
+# - Suggested conventions
+#
+# Review it. Add the rules that matter.
+# Run the first-try test.`
+  },
+  {
+    id: 75,
+    title: "CLAUDE.md is alive — update it every time Claude gets something wrong",
+    category: "Mental Model",
+    impact: 90,
+    viral: true,
+    insight: "CLAUDE.md is not a write-once artifact. It is a living document that grows with your project. Every time Claude violates a convention, add the rule. Every time you catch yourself re-explaining something in a prompt, move it to CLAUDE.md. The document evolves through use.",
+    why: "The best CLAUDE.md files were not written in one sitting. They accumulated through dozens of corrections. Each correction becomes a permanent rule that prevents the same mistake across all future sessions and all team members.",
+    example: `# The feedback loop:
+#
+# 1. Give Claude a task
+# 2. Claude uses Optional[str] instead of str | None
+# 3. Add to CLAUDE.md:
+#    "Use str | None, not Optional[str]"
+# 4. Next session: Claude uses str | None
+#
+# Every correction you add is a correction
+# nobody on your team ever makes again.`
+  },
+  {
+    id: 76,
+    title: "CLAUDE.local.md is your personal override — not committed to git",
+    category: "Workflow",
+    impact: 75,
+    viral: false,
+    insight: "<code>CLAUDE.local.md</code> works identically to CLAUDE.md but is not committed to git. Use it for personal preferences: your editor path, your preferred test flags, your debugging shortcuts. The team shares CLAUDE.md. You keep CLAUDE.local.md to yourself.",
+    why: "Teams need shared conventions (CLAUDE.md) and personal preferences (CLAUDE.local.md). Your verbose logging preference does not belong in the team's briefing. The local override keeps personal config out of the shared repository.",
+    example: `# CLAUDE.local.md (not committed to git)
+
+## My Preferences
+- When running tests, use: pytest -x --tb=short -v
+- My editor: VS Code (code --wait)
+- I prefer verbose error messages during debugging
+- Always show SQL queries when debugging database issues
+
+# This lives alongside CLAUDE.md but is
+# .gitignored so only I see it.`
   }
 ];
 
