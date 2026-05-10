@@ -255,6 +255,43 @@ claude
 
 ---
 
+## Part 5: The Global CLAUDE.md — Karpathy's 4 Rules
+
+Everything so far has been project-level instructions. But Claude also loads `~/.claude/CLAUDE.md` — a global file that applies to every project on your machine. That is where behavioral rules live — rules that are not about any one codebase but about how Claude should approach coding in general.
+
+Andrej Karpathy identified four LLM coding failure modes that show up regardless of the project. A repository packaging these into a CLAUDE.md hit #1 on GitHub trending with over 50,000 stars: [github.com/forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills). Create your global CLAUDE.md now:
+
+```bash
+mkdir -p ~/.claude
+cat > ~/.claude/CLAUDE.md << 'EOF'
+# Global Rules
+
+## 1. Think Before Coding
+Do not assume. If a requirement has multiple interpretations, list them.
+If something is unclear, stop and ask instead of guessing.
+
+## 2. Simplicity First
+Minimum code that solves the problem. No features beyond what was asked.
+No abstractions for single-use code. If 50 lines can solve it, do not write 200.
+
+## 3. Surgical Changes
+Touch only what you must. Do not "improve" adjacent code or refactor things
+that are not broken. Every changed line should trace directly to the request.
+
+## 4. Goal-Driven Execution
+Define success criteria before starting. Transform vague tasks into verifiable
+goals. "Fix the bug" becomes "write a test that reproduces it, then make it pass."
+EOF
+```
+
+**Why these four:** They correct universal LLM defaults — building the wrong thing because the model assumed instead of asking, over-engineering with abstractions nobody requested, creating noisy diffs by touching code it was never asked to change, and coding without defining done.
+
+**Test it:** Start a new Claude Code session in any project. Run `/status` — you should see your global CLAUDE.md listed. Give Claude a vague task and check: does it ask for clarification instead of guessing? Does it keep the change minimal?
+
+**The two-layer model:** Your project CLAUDE.md handles conventions (import patterns, naming, test fixtures). Your global CLAUDE.md handles discipline (ask before assuming, keep it simple, touch only what you must). Both load automatically, every session.
+
+---
+
 ## Key Takeaways
 
 1. **CLAUDE.md is your project's permanent briefing.** Claude reads it at the start of every session. Write what you would tell a new team member on day one.
@@ -269,6 +306,8 @@ claude
 
 6. **CLAUDE.md is alive — update it whenever Claude gets something wrong.** Every convention Claude violates is a line you forgot to write. Fix the instructions, not the prompt. The fix propagates to every future session automatically.
 
+7. **Global CLAUDE.md handles discipline. Project CLAUDE.md handles conventions.** Karpathy's four rules (think before coding, simplicity first, surgical changes, goal-driven execution) belong in `~/.claude/CLAUDE.md` because they fix LLM behavior in every project, not just one.
+
 ## Success Criteria
 
 - [ ] Created a CLAUDE.md that Claude loads automatically at session start
@@ -277,3 +316,4 @@ claude
 - [ ] Used path scoping (`paths:` frontmatter) on at least one rule file
 - [ ] Created a `.claude/settings.json` with at least one `env` variable
 - [ ] Ran `/status` to confirm all instruction files are loaded
+- [ ] Created a global `~/.claude/CLAUDE.md` with Karpathy's 4 behavioral rules

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code — Micro Insights | Code Coin Cognition</title>
-<meta name="description" content="76 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
+<meta name="description" content="77 advanced patterns for Claude Code — extracted from the Zero to Dangerous curriculum by Vikas Sah.">
 <meta property="og:title" content="Claude Code Micro Insights">
-<meta property="og:description" content="76 advanced patterns for Claude Code. Agent model, context budget, undo & rewind, experimentation loops, project instructions, and more.">
+<meta property="og:description" content="77 advanced patterns for Claude Code. Agent model, context budget, undo & rewind, experimentation loops, project instructions, and more.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -615,10 +615,10 @@
     <div class="header-badges">
       <span class="badge">Claude Code</span>
       <span class="badge green">Zero to Dangerous</span>
-      <span class="badge muted">Lessons 01 — 05</span>
+      <span class="badge muted">Lessons 01 — 08</span>
     </div>
     <h1>Claude Code <span>Micro Insights</span></h1>
-    <p class="header-sub">52 advanced patterns extracted from <em>Your First 30 Minutes</em>, <em>Undo &amp; Recover</em>, <em>Branch &amp; Experiment</em>, <em>Pick the Right Model for the Job</em>, and <em>Effort Control</em> — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, /model, /effort (shape of answers, effort levels, ultrathink), and the escalate-then-drop-back habit that keeps every token doing work worth paying for\.</p>
+    <p class="header-sub">76 advanced patterns extracted from Lessons 01–08 of the <em>Zero to Dangerous</em> curriculum — agent mental model, context budget, @file, !, /compact, Esc×2, /rewind, /branch, /fork, /model, /effort, ultrathink, /btw, --resume, Ctrl+G, /remote-control, CLAUDE.md, .claude/rules/, path scoping, settings.json, and the first-try test that turns project instructions into convention-following code on the first attempt.</p>
     <div class="header-meta">
       <a href="https://substack.com/@vikassah" target="_blank">by Vikas Sah</a>
       <span style="color:var(--border2)">·</span>
@@ -648,7 +648,7 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stat">
-      <span class="stat-val" id="visible-count">76</span>
+      <span class="stat-val" id="visible-count">77</span>
       <span class="stat-label">insights</span>
     </div>
     <div class="stat">
@@ -656,7 +656,7 @@
       <span class="stat-label">categories</span>
     </div>
     <div class="stat">
-      <span class="stat-val">39</span>
+      <span class="stat-val">40</span>
       <span class="stat-label">viral picks</span>
     </div>
     <div class="stat">
@@ -2269,6 +2269,34 @@ claude
 
 # This lives alongside CLAUDE.md but is
 # .gitignored so only I see it.`
+  },
+  {
+    id: 77,
+    title: "Karpathy's 4 rules belong in your global ~/.claude/CLAUDE.md",
+    category: "Mental Model",
+    impact: 94,
+    viral: true,
+    insight: "Andrej Karpathy identified four universal LLM coding failure modes: silent assumptions, overcomplexity, scope creep, and vague execution. A repo packaging these into a CLAUDE.md hit #1 on GitHub trending with 50K+ stars. Put them in <code>~/.claude/CLAUDE.md</code> — they apply to every project, not just one.",
+    why: "Project CLAUDE.md handles codebase conventions (import patterns, naming). Global CLAUDE.md handles behavioral discipline (ask before assuming, keep it simple, touch only what you must, define done). The two-layer model separates what changes per project from what never should.",
+    example: `# ~/.claude/CLAUDE.md (global — every project)
+
+## 1. Think Before Coding
+If a requirement has multiple interpretations, list them.
+If unclear, stop and ask instead of guessing.
+
+## 2. Simplicity First
+Minimum code that solves the problem. No speculative
+features. If 50 lines can solve it, do not write 200.
+
+## 3. Surgical Changes
+Touch only what you must. Do not "improve" adjacent
+code. Every changed line traces to the request.
+
+## 4. Goal-Driven Execution
+Define success criteria before starting. "Fix the bug"
+becomes "write a test that reproduces it, then pass it."
+
+# Source: github.com/forrestchang/andrej-karpathy-skills`
   }
 ];
 

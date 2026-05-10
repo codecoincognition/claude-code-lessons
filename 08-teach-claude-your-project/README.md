@@ -33,6 +33,10 @@ Lesson 07 taught you to persist sessions. Lesson 08 teaches you to persist knowl
 | `/init` | Auto-generate a starter CLAUDE.md from your project |
 | `/status` | Show which instruction files are loaded and active |
 
+## The Global Layer — Karpathy's 4 Rules
+
+Claude also loads `~/.claude/CLAUDE.md` — a global file that applies to every project. Andrej Karpathy identified four universal LLM coding failure modes and packaged them into a CLAUDE.md that hit #1 on GitHub trending ([source](https://github.com/forrestchang/andrej-karpathy-skills)): think before coding, simplicity first, surgical changes, and goal-driven execution. Project CLAUDE.md handles your codebase conventions. The global file handles behavioral discipline that applies everywhere.
+
 ## Concept Progression
 
 - Lesson 01 introduced `@file` for loading context into a single prompt
